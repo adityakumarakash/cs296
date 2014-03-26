@@ -68,7 +68,7 @@ namespace cs296
 		  b2BodyDef bd2;
 		  bd2.angle=-10*DEGTORAD;
 		  bd2.position.Set(20.0f, 35.5f);
-		  bd2.type = b2_dynamicBody;
+		  
 		  tail1 = m_world->CreateBody(&bd2);
 		  b2FixtureDef* fd2 = new b2FixtureDef;
 		  fd2->density = 1.f;
@@ -77,7 +77,7 @@ namespace cs296
 		  tail1->CreateFixture(fd2);
 		   fd2->shape = &vrec;
 		  tail1->CreateFixture(fd2);
-		 
+		 bd2.type = b2_dynamicBody;
 		  //Tail object2
 		  b2Body* tail2;
 		  tail2 = m_world->CreateBody(&bd2);
@@ -150,74 +150,74 @@ namespace cs296
 		  b2Body* tail6;
 		  tail6 = m_world->CreateBody(&bd2);
 		  bd2.angle=-90*DEGTORAD;
-		  bd2.position.Set(27.0f, 25.2f);
+		  bd2.position.Set(27.0f, 22.2f);
 		  tail6 = m_world->CreateBody(&bd2);
-		  hrec.SetAsBox(0.80f, 1.6f);
-		  vrec.SetAsBox(1.6f, 0.70f);
+		  hrec.SetAsBox(0.70f, 1.4f);
+		  vrec.SetAsBox(1.3f, 0.50f);
 		  fd2->shape = &hrec;
 		  tail6->CreateFixture(fd2);
 		   fd2->shape = &vrec;
 		  tail6->CreateFixture(fd2);
 		  
-		  anchor.Set(26.5f, 27.0f);
+		  anchor.Set(26.5f, 24.5f);
 		  jd.Initialize(tail5,tail6, anchor);
 		  m_world->CreateJoint(&jd);
 		  
 		  //Tailobject7
 		  b2Body* tail7;
 		  tail7 = m_world->CreateBody(&bd2);
-		  bd2.angle=-90*DEGTORAD;
-		  bd2.position.Set(27.0f, 25.2f);
+		  bd2.angle=-80*DEGTORAD;
+		  bd2.position.Set(27.0f, 19.2f);
 		  tail7 = m_world->CreateBody(&bd2);
-		  hrec.SetAsBox(0.80f, 1.6f);
-		  vrec.SetAsBox(1.6f, 0.70f);
+		  hrec.SetAsBox(0.60f, 1.3f);
+		  vrec.SetAsBox(1.2f, 0.50f);
 		  fd2->shape = &hrec;
 		  tail7->CreateFixture(fd2);
 		   fd2->shape = &vrec;
 		  tail7->CreateFixture(fd2);
 		  
-		  anchor.Set(26.5f, 27.0f);
+		  anchor.Set(26.5f, 20.5f);
 		  jd.Initialize(tail6,tail7, anchor);
 		  m_world->CreateJoint(&jd);
 		  
 		  //Tailobject8
 		  b2Body* tail8;
 		  tail8 = m_world->CreateBody(&bd2);
-		  bd2.angle=-90*DEGTORAD;
-		  bd2.position.Set(27.0f, 25.2f);
+		  bd2.angle=-55*DEGTORAD;
+		  bd2.position.Set(28.0f, 17.2f);
 		  tail8 = m_world->CreateBody(&bd2);
-		  hrec.SetAsBox(0.80f, 1.6f);
-		  vrec.SetAsBox(1.6f, 0.70f);
+		  hrec.SetAsBox(0.50f, 1.2f);
+		  vrec.SetAsBox(1.1f, 0.44f);
 		  fd2->shape = &hrec;
 		  tail8->CreateFixture(fd2);
 		   fd2->shape = &vrec;
 		  tail8->CreateFixture(fd2);
 		  
-		  anchor.Set(26.5f, 27.0f);
+		  anchor.Set(27.3f, 19.0f);
 		  jd.Initialize(tail7,tail8, anchor);
 		  m_world->CreateJoint(&jd);
-		  
+		 
 		  //Tailobject9
 		  b2Body* tail9;
 		  tail9 = m_world->CreateBody(&bd2);
-		  bd2.angle=-90*DEGTORAD;
-		  bd2.position.Set(27.0f, 25.2f);
+		  bd2.angle=-25*DEGTORAD;
+		  bd2.position.Set(29.5f, 16.2f);
 		  tail9 = m_world->CreateBody(&bd2);
-		  hrec.SetAsBox(0.80f, 1.6f);
-		  vrec.SetAsBox(1.6f, 0.70f);
+		  hrec.SetAsBox(0.50f, 0.9f);
+		  vrec.SetAsBox(1.6f, 0.30f);
 		  fd2->shape = &hrec;
 		  tail9->CreateFixture(fd2);
 		   fd2->shape = &vrec;
 		  tail9->CreateFixture(fd2);
 		  
-		  anchor.Set(26.5f, 27.0f);
+		  anchor.Set(28.5f, 17.0f);
 		  jd.Initialize(tail8,tail9, anchor);
 		  m_world->CreateJoint(&jd);
-		  
+	/*	  
 		  //Tailobject10
 		  b2Body* tail10;
 		  tail10 = m_world->CreateBody(&bd2);
-		  bd2.angle=-90*DEGTORAD;
+		  bd2.angle=10*DEGTORAD;
 		  bd2.position.Set(27.0f, 25.2f);
 		  tail10 = m_world->CreateBody(&bd2);
 		  hrec.SetAsBox(0.80f, 1.6f);
@@ -229,7 +229,7 @@ namespace cs296
 		  
 		  anchor.Set(26.5f, 27.0f);
 		  jd.Initialize(tail9,tail10, anchor);
-		  m_world->CreateJoint(&jd);
+		  m_world->CreateJoint(&jd);*/
 	  }
     
   }
