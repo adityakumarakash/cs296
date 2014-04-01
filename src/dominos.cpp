@@ -55,20 +55,197 @@ namespace cs296
 		  ground = m_world->CreateBody(&bd); 
 		  ground->CreateFixture(&shape, 0.0f);
 	  }
-	  //A part of tail
-	  {
-		  b2RevoluteJointDef jd;
+	  //Defining revolutory joint for all objects
+	   b2RevoluteJointDef jd;
 		  b2Vec2 anchor;
+		  //HEAD
+		  b2Body* head;
+		  {
+			  b2PolygonShape poly;
+			  b2Vec2 vertices[8];
+			  vertices[0].Set(0,0);
+			  vertices[1].Set(9,3);
+			  vertices[2].Set(10,-2);
+			  vertices[3].Set(4,-5.5);
+			  vertices[4].Set(-3,-5);
+			  vertices[5].Set(-3.5,-4);
+			  vertices[6].Set(-3,-3);
+			  vertices[7].Set(0,-2);
+			  poly.Set(vertices, 8);
+			  b2BodyDef bd;
+			  bd.position.Set(-39.0f, 34.0f);
+			  bd.type = b2_dynamicBody;
+			  head = m_world->CreateBody(&bd);
+			  b2FixtureDef* fd= new b2FixtureDef;
+			  fd->shape = new b2PolygonShape;
+			  fd->shape = &poly;
+			  fd->density = 1.f;
+			  head->CreateFixture(fd);
 		  
+		  }
+		  //NECK
+		b2Body* neck[3];
+		{
+			for (int i = 0; i < 3; i++)
+			{				
+				b2PolygonShape hrec,vrec;
+				hrec.SetAsBox(0.3f, 2.0f);
+				vrec.SetAsBox(0.5f, 1.0f);
+				b2BodyDef bd2;
+				bd2.position.Set(-27.5f-0.9*i, 34.5f);
+				bd2.type = b2_dynamicBody;
+				bd2.angle=10*DEGTORAD;
+				neck[i] = m_world->CreateBody(&bd2);
+				b2FixtureDef* fd2 = new b2FixtureDef;
+				fd2->density = 1.f;
+				fd2->shape = new b2PolygonShape;
+				fd2->shape = &hrec;
+				neck[i]->CreateFixture(fd2);
+				fd2->shape = &vrec;
+				neck[i]->CreateFixture(fd2);
+				if(i>0)
+				{
+					 anchor.Set(-27.0f-0.9*i, 34.5f);
+					jd.Initialize(neck[i-1],neck[i], anchor);
+					m_world->CreateJoint(&jd);
+				}
+			}
+			 anchor.Set(-27.0f-0.9*3, 34.5f);
+			jd.Initialize(neck[2],head, anchor);
+			m_world->CreateJoint(&jd);
+		}	 
+		 //MAIN B0DY
+		  b2Body* mainbody;
+		  {
+			  b2PolygonShape poly;
+			  b2Vec2 vertices[8];
+			  vertices[0].Set(0,0);
+			  vertices[1].Set(9,3);
+			  vertices[2].Set(26,0.5);
+			  vertices[3].Set(26,-1.5);
+			  vertices[4].Set(14,-10);
+			  vertices[5].Set(10,-10.2);
+			  vertices[6].Set(4,-8);
+			  vertices[7].Set(0.5,-3);
+			  poly.Set(vertices, 8);
+			  b2BodyDef bd;
+			  bd.position.Set(-27.0f, 36.0f);
+			  bd.type = b2_dynamicBody;
+			  mainbody = m_world->CreateBody(&bd);
+			  b2FixtureDef* fd= new b2FixtureDef;
+			  fd->shape = new b2PolygonShape;
+			  fd->shape = &poly;
+			  fd->density = 1.f;
+			  mainbody->CreateFixture(fd);
+			  
+			  anchor.Set(-27.0f, 35.5f);
+			jd.Initialize(neck[0],mainbody, anchor);
+			m_world->CreateJoint(&jd);
+		  
+		  }
+		//RIB
+		b2Body* rib[4];
+		{
+			for (int i = 0; i < 4; i++)
+			{				
+				b2PolygonShape hrec,vrec;
+				hrec.SetAsBox(0.3f, 2.4f);
+				vrec.SetAsBox(0.9f, 1.3f);
+				b2BodyDef bd2;
+				bd2.position.Set(4.8f-1.6*i, 35.5f);
+				bd2.type = b2_dynamicBody;
+				rib[i] = m_world->CreateBody(&bd2);
+				b2FixtureDef* fd2 = new b2FixtureDef;
+				fd2->density = 1.f;
+				fd2->shape = new b2PolygonShape;
+				fd2->shape = &hrec;
+				rib[i]->CreateFixture(fd2);
+				fd2->shape = &vrec;
+				rib[i]->CreateFixture(fd2);
+				if(i>0)
+				{
+					 anchor.Set(6.0f-1.6*i, 35.5f);
+					jd.Initialize(rib[i-1],rib[i], anchor);
+					m_world->CreateJoint(&jd);
+				}
+			}
+			anchor.Set(6.0f-1.6*4, 35.5f);
+			jd.Initialize(rib[3],mainbody, anchor);
+			m_world->CreateJoint(&jd);
+		
+		}	  
+	  //HIP
+	  b2Body* hip;
+	  {
+		  b2PolygonShape poly;
+		  b2Vec2 vertices[8];
+		  vertices[0].Set(0,0);
+		  vertices[1].Set(10,1);
+		  vertices[2].Set(13,-3);
+		  vertices[3].Set(11,-6);
+		  vertices[4].Set(4.4,-5);
+		  vertices[5].Set(3.6,-3.6);
+		  vertices[6].Set(1.4,-2.6);
+		  vertices[7].Set(-1,-4);
+		  poly.Set(vertices, 8);
+		  b2FixtureDef hipfd;
+		  hipfd.shape = &poly;
+		  hipfd.density = 0.0f;
+		  hipfd.friction = 1.0f;
+		  hipfd.restitution = 0.8f;
+		  b2BodyDef hipbd;
+		  hipbd.type = b2_dynamicBody;
+		  hipbd.position.Set(6.0f, 37.0f);
+		  hip = m_world->CreateBody(&hipbd);
+		  hip->CreateFixture(&hipfd);
+		
+		  anchor.Set(6.0f, 35.5f);
+			jd.Initialize(rib[0],hip, anchor);
+			m_world->CreateJoint(&jd);
+	  
+	  }
+	  //PILLARS
+	  b2Body* p1;
+	  b2Body* p2;
+	  {
+		b2PolygonShape poly;
+		poly.SetAsBox(2.0f, 13.0f);
+		b2BodyDef bd2;
+		bd2.position.Set(9.8f, 19.0f);
+		p1 = m_world->CreateBody(&bd2);
+		b2FixtureDef* fd2 = new b2FixtureDef;
+		fd2->density = 1.f;
+		fd2->shape = new b2PolygonShape;
+		fd2->shape = &poly;
+		p1->CreateFixture(fd2);
+		
+		anchor.Set(9.8f, 30.5f);
+		jd.Initialize(hip,p1, anchor);
+		m_world->CreateJoint(&jd);
+		
+		poly.SetAsBox(2.0f, 10.0f);
+		bd2.position.Set(-16.8f, 16.0f);
+		p2 = m_world->CreateBody(&bd2);
+		fd2->shape = &poly;
+		p2->CreateFixture(fd2);
+		
+		anchor.Set(-16.8f, 25.5f);
+		jd.Initialize(p2,mainbody, anchor);
+		m_world->CreateJoint(&jd);
+		
+	  
+	  }
+	  //TAIL
+	  {
 		  //Tail object1
 		  b2Body* tail1;
 		  b2PolygonShape hrec,vrec;
 		  hrec.SetAsBox(1.0f, 2.0f);
 		  vrec.SetAsBox(2.0f, 1.0f);
 		  b2BodyDef bd2;
-		  bd2.angle=-10*DEGTORAD;
+		  bd2.angle=10*DEGTORAD;
 		  bd2.position.Set(20.0f, 35.5f);
-		  
+		  bd2.type = b2_dynamicBody;
 		  tail1 = m_world->CreateBody(&bd2);
 		  b2FixtureDef* fd2 = new b2FixtureDef;
 		  fd2->density = 1.f;
@@ -77,7 +254,11 @@ namespace cs296
 		  tail1->CreateFixture(fd2);
 		   fd2->shape = &vrec;
 		  tail1->CreateFixture(fd2);
-		 bd2.type = b2_dynamicBody;
+		 
+		  anchor.Set(17.0f, 35.0f);
+		  jd.Initialize(tail1,hip, anchor);
+		  m_world->CreateJoint(&jd);
+		  
 		  //Tail object2
 		  b2Body* tail2;
 		  tail2 = m_world->CreateBody(&bd2);
@@ -213,23 +394,23 @@ namespace cs296
 		  anchor.Set(28.5f, 17.0f);
 		  jd.Initialize(tail8,tail9, anchor);
 		  m_world->CreateJoint(&jd);
-	/*	  
+		  
 		  //Tailobject10
 		  b2Body* tail10;
 		  tail10 = m_world->CreateBody(&bd2);
-		  bd2.angle=10*DEGTORAD;
-		  bd2.position.Set(27.0f, 25.2f);
+		  bd2.angle=15*DEGTORAD;
+		  bd2.position.Set(32.0f, 16.1f);
 		  tail10 = m_world->CreateBody(&bd2);
-		  hrec.SetAsBox(0.80f, 1.6f);
-		  vrec.SetAsBox(1.6f, 0.70f);
+		  hrec.SetAsBox(0.80f, 0.3f);
+		  vrec.SetAsBox(1.3f, 0.20f);
 		  fd2->shape = &hrec;
 		  tail10->CreateFixture(fd2);
 		   fd2->shape = &vrec;
 		  tail10->CreateFixture(fd2);
 		  
-		  anchor.Set(26.5f, 27.0f);
+		  anchor.Set(30.5f, 16.0f);
 		  jd.Initialize(tail9,tail10, anchor);
-		  m_world->CreateJoint(&jd);*/
+		  m_world->CreateJoint(&jd);
 	  }
     
   }
