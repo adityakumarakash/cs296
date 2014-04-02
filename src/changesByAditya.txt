@@ -1,0 +1,385 @@
+/*
+* Copyright (c) 2006-2009 Erin Catto http://www.box2d.org
+*
+* This software is provided 'as-is', without any express or implied
+* warranty.  In no event will the authors be held liable for any damages
+* arising from the use of this software.
+* Permission is granted to anyone to use this software for any purpose,
+* including commercial applications, and to alter it and redistribute it
+* freely, subject to the following restrictions:
+* 1. The origin of this software must not be misrepresented; you must not
+* claim that you wrote the original software. If you use this software
+* in a product, an acknowledgment in the product documentation would be
+* appreciated but is not required.
+* 2. Altered source versions must be plainly marked as such, and must not be
+* misrepresented as being the original software.
+* 3. This notice may not be removed or altered from any source distribution.
+*/
+
+/* 
+ * Base code for CS 296 Software Systems Lab 
+ * Department of Computer Science and Engineering, IIT Bombay
+ * Instructor: Parag Chaudhuri
+ */
+
+#define DEGTORAD 0.0174532925199432957f
+#include "cs296_base.hpp"
+#include "render.hpp"
+
+#ifdef __APPLE__
+	#include <GLUT/glut.h>
+#else
+	#include "GL/freeglut.h"
+#endif
+
+#include <cstring>
+using namespace std;
+
+#include "dominos.hpp"
+
+namespace cs296
+{
+  /**  The is the constructor 
+   * This is the documentation block for the constructor.
+   */ 
+
+  dominos_t::dominos_t()
+  {
+	  
+	  //GROUND
+	  {
+		  b2Body* ground;
+		  b2EdgeShape shape;
+		  shape.Set(b2Vec2(-90.0f, 5.0f), b2Vec2(90.0f, 5.0f));
+		  b2BodyDef bd; 
+		  ground = m_world->CreateBody(&bd); 
+		  ground->CreateFixture(&shape, 0.0f);
+	  }
+	  
+	  /**
+	   * The part below is made by aditya kumar akash - and only him copy and paste the neede info 
+	   * This is testing . donot bother about it
+	   */
+	  /* b2Body* body1;
+	   b2Body* body2;
+	   {
+		   b2BodyDef bd;
+		   bd.type=b2_dynamicBody;
+		   bd.position.Set(0.0f, 17.0f);
+		   
+		   b2PolygonShape dynamicBox;
+		   dynamicBox.SetAsBox(1.0f, 1.0f);
+		   
+		   b2FixtureDef fd;
+		   fd.shape=&dynamicBox;
+		   fd.density=1.0;
+		   
+		   body2=m_world->CreateBody(&bd);
+		   body2->CreateFixture(&fd);
+
+		}
+		// the second box
+	   {
+		   b2BodyDef bd;
+		   bd.type=b2_dynamicBody;
+		   bd.position.Set(0.0f, 27.0f);
+		   
+		   b2PolygonShape dynamicBox;
+		   dynamicBox.SetAsBox(1.0f, 1.0f);
+		   
+		   b2FixtureDef fd;
+		   fd.shape=&dynamicBox;
+		   fd.density=0.2;
+		   
+		   body1=m_world->CreateBody(&bd);
+		   body1->CreateFixture(&fd);
+
+		}
+		// two distance joints acting as springs
+		{b2DistanceJointDef jointDef;
+		const b2Vec2 a(0.4f, 17.0f);
+		const b2Vec2 b(0.4f, 27.0f);
+		jointDef.Initialize(body1, body2, b, a);
+		//jointDef.bodyA=body1;
+		//jointDef.bodyB=body2;
+		
+		
+		//jointDef.localAnchorA = a;
+		//jointDef.localAnchorB = b;
+		
+		jointDef.collideConnected = true;
+		jointDef.frequencyHz = 0.5f;
+		jointDef.dampingRatio =0.0f;
+	   
+		m_world->CreateJoint(&jointDef);}
+		{
+		b2DistanceJointDef jointDef;
+		const b2Vec2 a(-0.4f, 17.0f);
+		const b2Vec2 b(-0.4f, 27.0f);
+		jointDef.Initialize(body1, body2, b, a);
+		//jointDef.bodyA=body1;
+		//jointDef.bodyB=body2;
+		
+		
+		//jointDef.localAnchorA = a;
+		//jointDef.localAnchorB = b;
+		
+		jointDef.collideConnected = true;
+		jointDef.frequencyHz = 0.25f;
+		jointDef.dampingRatio =0.0f;
+	   
+		m_world->CreateJoint(&jointDef);}
+	  */
+	  
+	  {
+		   b2BodyDef bd;
+		   bd.type=b2_dynamicBody;
+		   bd.position.Set(-20.0f, 45.0f);
+		   
+		   b2PolygonShape dynamicBox;
+		   dynamicBox.SetAsBox(0.5f, 0.5f);
+		   
+		   b2FixtureDef fd;
+		   fd.shape=&dynamicBox;
+		   fd.density=10;
+		   
+		   b2Body* body1=m_world->CreateBody(&bd);
+		   body1->CreateFixture(&fd);
+
+		}
+
+		// creating a horizaontal platform to serve as temp cheetah body
+		b2Body* cheetahBody;
+		{
+			b2BodyDef cheetahBodyDef;
+			cheetahBodyDef.position.Set(-10.0f, 35.0f);
+			cheetahBodyDef.type=b2_dynamicBody;
+			
+			b2PolygonShape cheetahBodyShape;
+			cheetahBodyShape.SetAsBox(20.0f, 1.0f);
+			
+			b2FixtureDef cheetahBodyFixture;
+			cheetahBodyFixture.shape=&cheetahBodyShape;
+			
+			cheetahBody=m_world->CreateBody(&cheetahBodyDef);
+			cheetahBody->CreateFixture(&cheetahBodyFixture);
+		}
+		
+		// creating one leg for the body
+		
+		for(int i=0; i<2; i++)
+		{
+			float x_ref=i*0.5, y_ref=0;
+			{
+				// first part of leg
+				b2BodyDef legDef1;
+				legDef1.position.Set(x_ref+6.0f, y_ref+28.5f);
+				legDef1.type=b2_dynamicBody;
+				legDef1.angle = -0.1f * b2_pi; 
+				
+				b2PolygonShape legShape1;
+				legShape1.SetAsBox(0.5, 7.0f);
+				
+				b2FixtureDef legFixture1;
+				legFixture1.shape=&legShape1;
+				legFixture1.density=1.0f;
+				legFixture1.filter.groupIndex=-1;
+				
+				b2Body* backLeg1;
+				backLeg1=m_world->CreateBody(&legDef1);
+				backLeg1->CreateFixture(&legFixture1);
+				
+				// second bony part of leg
+				b2BodyDef legDef2;
+				legDef2.position.Set(x_ref+8.5f, y_ref+17.0f);
+				legDef2.type=b2_dynamicBody;
+				legDef2.angle = 0.2f * b2_pi; 
+				
+				b2PolygonShape legShape2;
+				legShape2.SetAsBox(0.5, 8.0f);
+				
+				b2FixtureDef legFixture2;
+				legFixture2.shape=&legShape2;
+				legFixture2.density=1.0f;
+				legFixture2.filter.groupIndex=-1;
+				
+				b2Body* backLeg2;
+				backLeg2=m_world->CreateBody(&legDef2);
+				backLeg2->CreateFixture(&legFixture2);
+				
+				// theird bony part of leg
+				b2BodyDef legDef3;
+				legDef3.position.Set(x_ref+11.0f, y_ref+9.5f);
+				legDef3.type=b2_dynamicBody;
+				legDef3.angle = -0.25f * b2_pi; 
+				
+				b2PolygonShape legShape3;
+				legShape3.SetAsBox(0.5, 6.0f);
+				
+				b2FixtureDef legFixture3;
+				legFixture3.shape=&legShape3;
+				legFixture3.density=1.0f;
+				legFixture3.friction=1.0f;
+				legFixture3.filter.groupIndex=-1;
+				
+				b2Body* backLeg3;
+				backLeg3=m_world->CreateBody(&legDef3);
+				backLeg3->CreateFixture(&legFixture3);
+				
+				// now joining joint1
+				b2RevoluteJointDef joint1;
+				const b2Vec2 point1(x_ref+8.0f, y_ref+35.0f);
+				
+				joint1.Initialize(cheetahBody, backLeg1, point1);
+				joint1.lowerAngle = -0.01f * b2_pi;
+				joint1.upperAngle = 0.01f * b2_pi; 
+				joint1.enableLimit = true;
+				joint1.maxMotorTorque = 10.0f;
+				joint1.motorSpeed = 0.0f;
+				joint1.enableMotor = true;			
+				m_world->CreateJoint(&joint1);
+				
+				
+				// now joining joint2
+				b2RevoluteJointDef joint2;
+				const b2Vec2 point2(x_ref+4.5f, y_ref+23.0f);
+				joint2.Initialize(backLeg1, backLeg2, point2);
+				m_world->CreateJoint(&joint2);
+				
+				// now joining joint3
+				b2RevoluteJointDef joint3;
+				const b2Vec2 point3(x_ref+12.5f, y_ref+11.0f);
+				joint3.Initialize(backLeg2, backLeg3, point3);
+				m_world->CreateJoint(&joint3);
+				
+				// making a distance joint
+				b2DistanceJointDef joint4;
+				const b2Vec2 point4(x_ref+4.5f, y_ref+23.0f);
+				const b2Vec2 point5(x_ref+15.5f, y_ref+13.0f);
+				joint4.Initialize(backLeg2, backLeg3, point4, point5);
+				joint4.collideConnected = true;
+				joint4.frequencyHz = 5.0f;
+				joint4.dampingRatio =0.0f;
+				m_world->CreateJoint(&joint4);
+				
+				// making another distance joint
+				b2DistanceJointDef joint5;
+				const b2Vec2 point6(x_ref+5.5f, y_ref+27.0f);
+				const b2Vec2 point7(x_ref+15.5f, y_ref+13.0f);
+				joint4.Initialize(backLeg1, backLeg3, point6, point7);
+				joint4.collideConnected = true;
+				joint4.frequencyHz = 5.0f;
+				joint4.dampingRatio =0.8f;
+				m_world->CreateJoint(&joint4);
+				
+				
+			}
+			
+		}	
+			// creating one front leg for the body
+		
+		{
+			// first part of leg
+			b2BodyDef legDef1;
+			legDef1.position.Set(-30.0f,30.5f);
+			legDef1.type=b2_dynamicBody;
+			legDef1.angle = -0.1f * b2_pi; 
+			
+			b2PolygonShape legShape1;
+			legShape1.SetAsBox(0.5, 5.0f);
+			
+			b2FixtureDef legFixture1;
+			legFixture1.shape=&legShape1;
+			legFixture1.density=1.0f;
+			
+			b2Body* backLeg1;
+			backLeg1=m_world->CreateBody(&legDef1);
+			backLeg1->CreateFixture(&legFixture1);
+			
+			// second bony part of leg
+			b2BodyDef legDef2;
+			legDef2.position.Set(-27.0f, 20.0f);
+			legDef2.type=b2_dynamicBody;
+			legDef2.angle = 0.2f * b2_pi; 
+			
+			b2PolygonShape legShape2;
+			legShape2.SetAsBox(0.5, 8.0f);
+			
+			b2FixtureDef legFixture2;
+			legFixture2.shape=&legShape2;
+			legFixture2.density=1.0f;
+			
+			b2Body* backLeg2;
+			backLeg2=m_world->CreateBody(&legDef2);
+			backLeg2->CreateFixture(&legFixture2);
+			
+			// theird bony part of leg
+			b2BodyDef legDef3;
+			legDef3.position.Set(-24.5f,11.5f);
+			legDef3.type=b2_dynamicBody;
+			legDef3.angle = -0.17f * b2_pi; 
+			
+			b2PolygonShape legShape3;
+			legShape3.SetAsBox(0.5, 7.5f);
+			
+			b2FixtureDef legFixture3;
+			legFixture3.shape=&legShape3;
+			legFixture3.density=1.0f;
+			legFixture3.friction=1.0f;
+			
+			b2Body* backLeg3;
+			backLeg3=m_world->CreateBody(&legDef3);
+			backLeg3->CreateFixture(&legFixture3);
+			
+			// now joining joint1
+			b2RevoluteJointDef joint1;
+			const b2Vec2 point1(-28.5f, 35.0f);
+			joint1.Initialize(cheetahBody, backLeg1, point1);
+			joint1.lowerAngle = -0.01f * b2_pi;
+			joint1.upperAngle = 0.1f * b2_pi; 
+			joint1.enableLimit = true;
+			joint1.maxMotorTorque = 10.0f;
+			joint1.motorSpeed = 0.0f;
+			joint1.enableMotor = true;			
+			m_world->CreateJoint(&joint1);
+			
+			// now joining joint2
+			b2RevoluteJointDef joint2;
+			const b2Vec2 point2(-31.5f, 26.0f);
+			joint2.Initialize(backLeg1, backLeg2, point2);
+			m_world->CreateJoint(&joint2);
+			
+			// now joining joint3
+			b2RevoluteJointDef joint3;
+			const b2Vec2 point3(-23.0f, 14.0f);
+			joint3.Initialize(backLeg2, backLeg3, point3);
+			m_world->CreateJoint(&joint3);
+			
+			// making a distance joint
+			b2DistanceJointDef joint4;
+			const b2Vec2 point4(-31.5f, 26.0f);
+			const b2Vec2 point5(-20.5f, 17.5f);
+			joint4.Initialize(backLeg2, backLeg3, point4, point5);
+			joint4.collideConnected = true;
+			joint4.frequencyHz = 5.0f;
+			joint4.dampingRatio =0.8f;
+			m_world->CreateJoint(&joint4);
+			
+			// making another distance joint
+			b2DistanceJointDef joint5;
+			const b2Vec2 point6(-30.5f, 29.0f);
+			const b2Vec2 point7(-20.5f, 17.5f);
+			joint4.Initialize(backLeg1, backLeg3, point6, point7);
+			joint4.collideConnected = true;
+			joint4.frequencyHz = 5.0f;
+			joint4.dampingRatio =0.0f;
+			m_world->CreateJoint(&joint4);
+			
+			
+		}
+		
+		
+  }
+
+  sim_t *sim = new sim_t("Dominos", dominos_t::create);
+}
