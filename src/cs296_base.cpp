@@ -18,6 +18,7 @@
 
 #include "cs296_base.hpp"
 #include <cstdio>
+#include <ctime>
 using namespace std;
 using namespace cs296;
 
@@ -49,7 +50,28 @@ base_sim_t::~base_sim_t()
 	delete m_world;
 	m_world = NULL;
 }
-
+void base_sim_t::jump_cheetah(){
+	/*b2Vec2 vec=cheetahBody->GetLinearVelocity();
+	vec.y=150;
+	cheetahBody->SetLinearVelocity(vec);	*/
+	cheetahBody->ApplyLinearImpulse(b2Vec2(0,1000),cheetahBody->GetWorldCenter(),true);
+	usleep(1000000);
+}
+void base_sim_t::sit_cheetah(){
+	b2Vec2 vec=cheetahBody->GetLinearVelocity();
+	vec.y-=50;
+	cheetahBody->SetLinearVelocity(vec);		
+}
+void base_sim_t::left_cheetah(){
+	b2Vec2 vec=cheetahBody->GetLinearVelocity();
+	vec.x-=50;
+	cheetahBody->SetLinearVelocity(vec);	
+}
+void base_sim_t::right_cheetah(){
+	b2Vec2 vec=cheetahBody->GetLinearVelocity();
+	vec.x+=50;
+	cheetahBody->SetLinearVelocity(vec);		
+}
 void base_sim_t::pre_solve(b2Contact* contact, const b2Manifold* oldManifold)
 {
   const b2Manifold* manifold = contact->GetManifold();

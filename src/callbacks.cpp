@@ -105,6 +105,30 @@ namespace cs296
       view_zoom = b2Max(0.9f * view_zoom, 0.02f);
       resize_cb(width, height);
       break;
+     
+     //! Press 'w' to make cheetah jump 
+     case 'W':
+     case 'w':
+      test->jump_cheetah();
+      break;
+     
+      //! Press 's' to make cheetah jump 
+     case 'S':
+     case 's':
+      test->sit_cheetah();
+      break;
+      
+     //! Press 'a' to make cheetah jump 
+     case 'A':
+     case 'a':
+      test->left_cheetah();
+      break;
+      
+      //! Press 'd' to make cheetah jump 
+     case 'D':
+     case 'd':
+      test->right_cheetah();
+      break;
       
     //! Press 'r' to reset.
     case 'r':

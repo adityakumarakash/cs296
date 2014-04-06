@@ -117,9 +117,12 @@ namespace cs296
   class base_sim_t : public b2ContactListener
   {
   public:
-    
+    b2Body* cheetahBody;
     base_sim_t();
-
+	void jump_cheetah();
+	void sit_cheetah();
+	void left_cheetah();
+	void right_cheetah();
     //! Virtual destructors - amazing objects. Why are these necessary?
     virtual ~base_sim_t();
     
