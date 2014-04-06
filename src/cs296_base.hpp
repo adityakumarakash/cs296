@@ -118,11 +118,15 @@ namespace cs296
   {
   public:
     b2Body* cheetahBody;
+    b2Body* backLeg[2];
+    b2Body* frontLeg[2];
     base_sim_t();
 	void jump_cheetah();
 	void sit_cheetah();
 	void left_cheetah();
 	void right_cheetah();
+	void legFront();
+	void legBack();
     //! Virtual destructors - amazing objects. Why are these necessary?
     virtual ~base_sim_t();
     
