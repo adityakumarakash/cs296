@@ -54,84 +54,28 @@ namespace cs296
 		  b2BodyDef bd; 
 		  ground = m_world->CreateBody(&bd); 
 		  ground->CreateFixture(&shape, 0.0f);
+		  for (int i = -900; i < 100; i++)
+		  {
+			  
+		  b2Body* sm;
+			 b2PolygonShape poly;
+			  b2Vec2 vertices[3];
+			  vertices[0].Set(0,0);
+			  vertices[1].Set(0.8,0);
+			  vertices[2].Set(0.4,0.5);
+			  poly.Set(vertices, 3);
+			  b2BodyDef bd;
+			  bd.position.Set(i, 5.0f);
+			  sm = m_world->CreateBody(&bd);
+			  b2FixtureDef* fd= new b2FixtureDef;
+			  fd->shape = new b2PolygonShape;
+			  fd->shape = &poly;
+			  fd->friction=2.0;
+			  fd->density = 0.1f;
+			  sm->CreateFixture(fd)  ;
+		  }
+		  
 	  }
-	  
-	  /**
-	   * The part below is made by aditya kumar akash - and only him copy and paste the neede info 
-	   * This is testing . donot bother about it
-	   */
-	  /* b2Body* body1;
-	   b2Body* body2;
-	   {
-		   b2BodyDef bd;
-		   bd.type=b2_dynamicBody;
-		   bd.position.Set(0.0f, 17.0f);
-		   
-		   b2PolygonShape dynamicBox;
-		   dynamicBox.SetAsBox(1.0f, 1.0f);
-		   
-		   b2FixtureDef fd;
-		   fd.shape=&dynamicBox;
-		   fd.density=1.0;
-		   
-		   body2=m_world->CreateBody(&bd);
-		   body2->CreateFixture(&fd);
-
-		}
-		// the second box
-	   {
-		   b2BodyDef bd;
-		   bd.type=b2_dynamicBody;
-		   bd.position.Set(0.0f, 27.0f);
-		   
-		   b2PolygonShape dynamicBox;
-		   dynamicBox.SetAsBox(1.0f, 1.0f);
-		   
-		   b2FixtureDef fd;
-		   fd.shape=&dynamicBox;
-		   fd.density=0.2;
-		   
-		   body1=m_world->CreateBody(&bd);
-		   body1->CreateFixture(&fd);
-
-		}
-		// two distance joints acting as springs
-		{b2DistanceJointDef jointDef;
-		const b2Vec2 a(0.4f, 17.0f);
-		const b2Vec2 b(0.4f, 27.0f);
-		jointDef.Initialize(body1, body2, b, a);
-		//jointDef.bodyA=body1;
-		//jointDef.bodyB=body2;
-		
-		
-		//jointDef.localAnchorA = a;
-		//jointDef.localAnchorB = b;
-		
-		jointDef.collideConnected = true;
-		jointDef.frequencyHz = 0.5f;
-		jointDef.dampingRatio =0.0f;
-	   
-		m_world->CreateJoint(&jointDef);}
-		{
-		b2DistanceJointDef jointDef;
-		const b2Vec2 a(-0.4f, 17.0f);
-		const b2Vec2 b(-0.4f, 27.0f);
-		jointDef.Initialize(body1, body2, b, a);
-		//jointDef.bodyA=body1;
-		//jointDef.bodyB=body2;
-		
-		
-		//jointDef.localAnchorA = a;
-		//jointDef.localAnchorB = b;
-		
-		jointDef.collideConnected = true;
-		jointDef.frequencyHz = 0.25f;
-		jointDef.dampingRatio =0.0f;
-	   
-		m_world->CreateJoint(&jointDef);}
-	  */
-	  
-
 
 		// creating a horizaontal platform to serve as temp cheetah body
 		
@@ -154,7 +98,7 @@ namespace cs296
 		
 		for(int i=0; i<2; i++)
 		{
-			float x_ref=i*-1, y_ref=0;
+			float x_ref=0, y_ref=0;
 			{
 				
 				// first part of leg
@@ -171,9 +115,8 @@ namespace cs296
 				legFixture1.density=1.0f;
 				legFixture1.filter.groupIndex=-1;
 				
-				b2Body* backLeg1;
-				backLeg1=m_world->CreateBody(&legDef1);
-				backLeg1->CreateFixture(&legFixture1);
+				backLeg[i]=m_world->CreateBody(&legDef1);
+				backLeg[i]->CreateFixture(&legFixture1);
 				
 				// second bony part of leg
 				b2BodyDef legDef2;
@@ -211,14 +154,41 @@ namespace cs296
 				b2Body* backLeg3;
 				backLeg3=m_world->CreateBody(&legDef3);
 				backLeg3->CreateFixture(&legFixture3);
+				/*
+					// the toes part as a circle
+				b2BodyDef toeDef;
+				toeDef.position.Set(x_ref + 9.1f, y_ref + 5.9f);
+				toeDef.type = b2_dynamicBody;
+				
+				b2CircleShape circleShape;
+				circleShape.m_p.Set(0, 0); //position, relative to body position
+				circleShape.m_radius = 1.2f; //radius
+				
+				b2FixtureDef toeFix;
+				toeFix.shape = &circleShape; //this is a pointer to the shape above
+				toeFix.density = 10.0f;
+				toeFix.friction = 2.0f;
+				toeFix.filter.groupIndex = -1; 
+				
+				b2Body* toe;
+				toe = m_world->CreateBody(&toeDef);
+				toe->CreateFixture(&toeFix);
+				
+				// joining the toes to the last bony part 
+				b2WeldJointDef toeJoint;
+		
+				b2Vec2 anchorToe;
+				anchorToe.Set(x_ref + 9.1f, y_ref + 5.9f);
+				toeJoint.Initialize(toe ,backLeg3 , anchorToe);
+				m_world->CreateJoint(&toeJoint);*/
 				
 				// now joining joint1
 				b2RevoluteJointDef joint1;
 				const b2Vec2 point1(x_ref+10.0f, y_ref+35.0f);
 				
-				joint1.Initialize(cheetahBody, backLeg1, point1);
-				joint1.lowerAngle = -0.01f * b2_pi;
-				joint1.upperAngle = 0.01f * b2_pi; 
+				joint1.Initialize(cheetahBody, backLeg[i], point1);
+				joint1.lowerAngle = -0.1f * b2_pi;
+				joint1.upperAngle = 0.1f * b2_pi; 
 				joint1.enableLimit = true;
 				joint1.maxMotorTorque = 10.0f;
 				joint1.motorSpeed = 0.0f;
@@ -229,7 +199,7 @@ namespace cs296
 				// now joining joint2
 				b2RevoluteJointDef joint2;
 				const b2Vec2 point2(x_ref+6.5f, y_ref+23.0f);
-				joint2.Initialize(backLeg1, backLeg2, point2);
+				joint2.Initialize(backLeg[i], backLeg2, point2);
 				joint2.lowerAngle = -0.01f * b2_pi;
 				joint2.upperAngle = 0.1f * b2_pi; 
 				joint2.enableLimit = true;
@@ -255,7 +225,7 @@ namespace cs296
 				b2DistanceJointDef joint5;
 				const b2Vec2 point6(x_ref+7.5f, y_ref+27.0f);
 				const b2Vec2 point7(x_ref+17.5f, y_ref+13.0f);
-				joint4.Initialize(backLeg1, backLeg3, point6, point7);
+				joint4.Initialize(backLeg[i], backLeg3, point6, point7);
 				joint4.collideConnected = true;
 				joint4.frequencyHz = 5.0f;
 				joint4.dampingRatio =0.8f;
@@ -268,7 +238,8 @@ namespace cs296
 			// creating front legs for the body
 		
 		{
-			for(int legno=0;legno<2;legno++){
+			int legno=0;
+			for(int i=0; i < 2; i++){
 				// first part of leg
 				b2BodyDef legDef1;
 				legDef1.position.Set(-30.0f+legno,30.5f);
@@ -282,9 +253,9 @@ namespace cs296
 				legFixture1.shape=&legShape1;
 				legFixture1.density=1.0f;
 				legFixture1.filter.groupIndex=-2;
-				b2Body* backLeg1;
-				backLeg1=m_world->CreateBody(&legDef1);
-				backLeg1->CreateFixture(&legFixture1);
+
+				frontLeg[i]=m_world->CreateBody(&legDef1);
+				frontLeg[i]->CreateFixture(&legFixture1);
 				
 				// second bony part of leg
 				b2BodyDef legDef2;
@@ -320,11 +291,38 @@ namespace cs296
 				b2Body* backLeg3;
 				backLeg3=m_world->CreateBody(&legDef3);
 				backLeg3->CreateFixture(&legFixture3);
+				/*
+				// the toes part as a circle
+				b2BodyDef toeDef;
+				toeDef.position.Set( -28.0f, 5.9f);
+				toeDef.type = b2_dynamicBody;
 				
+				b2CircleShape circleShape;
+				circleShape.m_p.Set(0, 0); //position, relative to body position
+				circleShape.m_radius = 1.2f; //radius
+				
+				b2FixtureDef toeFix;
+				toeFix.shape = &circleShape; //this is a pointer to the shape above
+				toeFix.density = 10.0f;
+				toeFix.friction = 2.0f;
+				toeFix.filter.groupIndex = -2; 
+				
+				b2Body* toe;
+				toe = m_world->CreateBody(&toeDef);
+				toe->CreateFixture(&toeFix);
+				
+				// joining the toes to the last bony part 
+				b2WeldJointDef toeJoint;
+		
+				b2Vec2 anchorToe;
+				anchorToe.Set(-28.0f, 5.9f);
+				toeJoint.Initialize(toe ,backLeg3 , anchorToe);
+				m_world->CreateJoint(&toeJoint);
+				*/
 				// now joining joint1
 				b2RevoluteJointDef joint1;
 				const b2Vec2 point1(-28.5f+legno, 35.0f);
-				joint1.Initialize(cheetahBody, backLeg1, point1);
+				joint1.Initialize(cheetahBody, frontLeg[i], point1);
 				joint1.lowerAngle = -0.01f * b2_pi;
 				joint1.upperAngle = 0.1f * b2_pi; 
 				joint1.enableLimit = true;
@@ -336,7 +334,7 @@ namespace cs296
 				// now joining joint2
 				b2RevoluteJointDef joint2;
 				const b2Vec2 point2(-31.5f+legno, 26.0f);
-				joint2.Initialize(backLeg1, backLeg2, point2);
+				joint2.Initialize(frontLeg[i], backLeg2, point2);
 				joint2.lowerAngle = -0.01f * b2_pi;
 				joint2.upperAngle = 0.1f * b2_pi; 
 				joint2.enableLimit = true;
@@ -362,7 +360,7 @@ namespace cs296
 				b2DistanceJointDef joint5;
 				const b2Vec2 point6(-30.5f+legno, 29.0f);
 				const b2Vec2 point7(-20.5f+legno, 17.5f);
-				joint4.Initialize(backLeg1, backLeg3, point6, point7);
+				joint4.Initialize(frontLeg[i], backLeg3, point6, point7);
 				joint4.collideConnected = true;
 				joint4.frequencyHz = 5.0f;
 				joint4.dampingRatio =0.0f;
@@ -454,19 +452,22 @@ namespace cs296
 				neck[i]->CreateFixture(fd2);
 				if(i>0)
 				{
+					b2WeldJointDef jd1;
 					 anchor.Set(-32.0f-0.9*i, 34.5f);
-					jd.Initialize(neck[i-1],neck[i], anchor);
-					m_world->CreateJoint(&jd);
+					jd1.Initialize(neck[i-1],neck[i], anchor);
+					m_world->CreateJoint(&jd1);
 				}
 			}
+			b2WeldJointDef jd1;
 			 anchor.Set(-32.0f-0.9*3, 34.5f);
-			jd.Initialize(neck[2],head, anchor);
-			m_world->CreateJoint(&jd);
+			jd1.Initialize(neck[2],head, anchor);
+			m_world->CreateJoint(&jd1);
 			
 			anchor.Set(-32.0f-0.9*0, 34.5f);
-			jd.Initialize(neck[0],cheetahBody, anchor);
-			m_world->CreateJoint(&jd);
+			jd1.Initialize(neck[0],cheetahBody, anchor);
+			m_world->CreateJoint(&jd1);
 		}	
+		
 	  
 		//HIP
 	  b2Body* hip;
@@ -484,7 +485,7 @@ namespace cs296
 		  poly.Set(vertices, 8);
 		  b2FixtureDef hipfd;
 		  hipfd.shape = &poly;
-		  hipfd.density = 0.01f;
+		  hipfd.density = 0.1f;
 		  hipfd.friction = 1.0f;
 		  hipfd.restitution = 0.8f;
 		  b2BodyDef hipbd;

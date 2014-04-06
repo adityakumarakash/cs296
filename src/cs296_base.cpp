@@ -19,6 +19,7 @@
 #include "cs296_base.hpp"
 #include <cstdio>
 #include <ctime>
+#include <unistd.h>
 using namespace std;
 using namespace cs296;
 
@@ -26,7 +27,7 @@ using namespace cs296;
 base_sim_t::base_sim_t()
 {
 	b2Vec2 gravity;
-	gravity.Set(0.0f, -10.0f);
+	gravity.Set(0.0f, -6.0f);
 	m_world = new b2World(gravity);
 
 	m_text_line = 30;
@@ -54,8 +55,8 @@ void base_sim_t::jump_cheetah(){
 	/*b2Vec2 vec=cheetahBody->GetLinearVelocity();
 	vec.y=150;
 	cheetahBody->SetLinearVelocity(vec);	*/
-	cheetahBody->ApplyLinearImpulse(b2Vec2(0,1000),cheetahBody->GetWorldCenter(),true);
-	usleep(1000000);
+	cheetahBody->ApplyLinearImpulse(b2Vec2(0,100),cheetahBody->GetWorldCenter(),true);
+	//usleep(1000000);
 }
 void base_sim_t::sit_cheetah(){
 	b2Vec2 vec=cheetahBody->GetLinearVelocity();
@@ -71,6 +72,20 @@ void base_sim_t::right_cheetah(){
 	b2Vec2 vec=cheetahBody->GetLinearVelocity();
 	vec.x+=50;
 	cheetahBody->SetLinearVelocity(vec);		
+}
+void base_sim_t::legFront(){
+		frontLeg[0]->ApplyAngularImpulse( 2200 ,1);
+		backLeg[0]->ApplyAngularImpulse( 2200 ,1);
+		frontLeg[1]->ApplyAngularImpulse( -2200 ,1);
+		backLeg[1]->ApplyAngularImpulse( -2200 ,1);
+		
+		
+}
+void base_sim_t::legBack(){
+			frontLeg[0]->ApplyAngularImpulse( -2200,1 );
+		backLeg[0]->ApplyAngularImpulse( -2200 ,1);
+		frontLeg[1]->ApplyAngularImpulse( 2200 ,1);
+		backLeg[1]->ApplyAngularImpulse( 2200 ,1);
 }
 void base_sim_t::pre_solve(b2Contact* contact, const b2Manifold* oldManifold)
 {

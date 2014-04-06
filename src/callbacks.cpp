@@ -121,13 +121,13 @@ namespace cs296
      //! Press 'a' to make cheetah jump 
      case 'A':
      case 'a':
-      test->left_cheetah();
+      test->legBack();
       break;
       
       //! Press 'd' to make cheetah jump 
      case 'D':
      case 'd':
-      test->right_cheetah();
+      test->legFront();
       break;
       
     //! Press 'r' to reset.
