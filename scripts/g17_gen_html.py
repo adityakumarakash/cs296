@@ -6,7 +6,7 @@ print("Generating HTML report")
 outfile.write("<html><head><title>Lab09 Report</title><link rel=\"stylesheet\" href=\"./style.css\"></head> <body>")
 bracesstr={"paragraph":"b","title":"h1","section":"h2","subsection":"h3","subsection\*":"h3","textbf":"b","emph":"i","texttt":"span style=\"font-family:monospace\"","date":"date","footnotesize":"div","caption":"div class=\"img-caption\""}
 lineextractor={"item":"li"}
-replaceable={'author{':"<div class=\"author\"><b>By:</b><br><br>","maketitle":"</div>","and":"<br>"}
+replaceable={'author{':"<div class=\"author\"><b>By:</b><br><br>","maketitle":"</div>","newline":"<br><br>","newpage":"<br><br>","and":"<br>"}
 removables=["documentclass","usepackage","centering","bibliography"]
 beginstr={"document":"div","enumerate":"ul","figure":"div class=\"image\"","lstlisting":"code","singlespace":"div"}
 

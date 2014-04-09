@@ -43,15 +43,20 @@ namespace cs296
    * This is the documentation block for the constructor.
    */ 
 	
-	b2Vec2 m_offset;
-	b2Body* m_wheel;
-	float32 m_motorSpeed;
-	bool m_motorOn;
+	b2Vec2 m_offset; //! This is the offset variable which moves a body from particular distance from center
+	b2Body* m_wheel; //! This is main wheel which is used on walking of cheetah
+	float32 m_motorSpeed; //! Variable storing the motorspeed
+	bool m_motorOn; //! Bool value to check is motor is On
 	int val=0;
 	float32 c = 2.5;
 	
+	/*! \brief Function to create leg
+	 * 
+	 * This function is used to create the leg of the cheetah with different orientaation
+	 * */
 	void dominos_t::CreateLeg(float32 s, const b2Vec2& wheelAnchor)
 	{
+		//! Cordinates controlling the orientation of leg
 		b2Vec2 p1(c * 5.4f * s, -6.1f * c);
 		b2Vec2 p2(c * 7.2f * s, -1.2f * c);
 		b2Vec2 p3(c * 4.3f * s, -1.9f * c);

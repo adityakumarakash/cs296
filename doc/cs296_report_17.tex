@@ -148,20 +148,19 @@ perf script | python gprof2dot.py -f perf | dot -Tpng -o release.png
 \end{figure}
 
 \subsection*{Observation from Debug Call Graph}
-List of Functions which consume most time
+List of Functions which consume most time in the call of their parents
 \begin{enumerate}
-    \item base\_sim\_t:step() 96.96a \%
-    \item b2World::step() 91.82 \%
-    \item b2World::solve() 80.01\%
-    \item b2Island::solve() 47.32\%
-    \item b2RevoluteJoint::SolveVelocityConstraints() 8.71\%
-    \item b2DistanceJoint::SolveVelocityConstraints() 9.86\%
-    \item b2weldJoint::SolveVelocityConstraints() 2.20\%
-    \item b2World::DrawShape() 10.35 \%
-    \item b2Body::SynchronizeFixture() 19.88 \%
-     \item b2Fixture::SynchronizeFixture() 18.63 \%
-    \item b2World::DrawDebugData() 11.30 \%
-
+    \item b2World::step() 92.00 \%
+    \item b2World::solve() 49.00 \%
+    \item b2RevoluteJoint::SolveVelocityConstraints() 8.00 \%
+    \item b2DistanceJoint::SolveVelocityConstraints() 9.24 \%
+    \item b2weldJoint::SolveVelocityConstraints() 9.24 \%
+    \item b2Fixture::SynchronizeFixture() 21.29 \%
+    \item b2Fixture::Synchronize() 20.00 \%
+    \item b2BroadPhase::MoveProxy() 11.00 \%
+    \item b2BroadPhase::UpdatePairs(b2ConstactManager) 9.56 \%
+    \item b2DynamicTree::querry() 7.24 \%
+    
 \end{enumerate}
 
 \begin{figure}[h!]
@@ -173,25 +172,37 @@ List of Functions which consume most time
 \subsection*{Observation from Release Call Graph}
 List of Functions which consume most time
 \begin{enumerate}
-    \item b2World::solve() 13.35\%
-    \item b2contactSolver::SolveVelocityConstraints() 14.36\%
-    \item b2World::DrawShape() 19.05 \%
-    \item lib-2.17.so \_sincost 15.06 \%
-    \item lib-2.17.so \_mcount 1.47 \%
-    \item lib-2.17.so \_mcount\_internal 1.05 \%
+    \item b2RevoluteJoint::SolveVelocityConstraints() 4.76 \%
+    \item b2DistanceJoint::SolveVelocityConstraints() 4.48 \%
+    \item b2weldJoint::SolveVelocityConstraints() 3.92 \%
+    \item solve() 5.20 \%
+    \item b2Timer::GetMilliseconds() 3.86 \%
+    \item b2DynamicTree::Querry() 6.74 \%
+    \item b2Fixture::synchronize() 0.80 \%
 \end{enumerate}
 
 \subsection{Analysis of above Call Graphs}
+\textbf{General Analysis} :\\
 \textbf{Debug Mode} :\\
 As we can see from the callgraph and the most time consuming functions , debug mode calls much more functions as compared to the call graph of release mode.
 Most of the time is consumed by the calculating functions which are solve , solveVelocityContraints etc 
- consumes most of the time as compared to the Drawshape funstion and drawDebug function\\
+consumes most of the time as compared to the Drawshape funstion and drawDebug function\\
 \textbf{Release Mode} :\\
 As opposed to the times in Debug mode , The Drawshape function take the most time in the running of the function while the solving function functions like
 solveVelocityContraints and solve function took time much lesser than that in debug mode. also the system library used for calculation took very less
-time 
+time \\
+\textbf{Special Analysis w.r.t The Project Code } : \\
+Clearly we can see that the functions related to synchronizing fixtures and collision detection such as - \emph{SynchronizeFixture() and FindNew Manager}
+take more as compared to profiling done in earlier labs.\\
+Also the Functions related to BroadPhase which manages the proxies ( - representing the AABB's in broadPhase collision algorithm ) 
+and the creation and deletion of records w.r.t the overlap of proxies such as
+\emph{MoveProxy(), UpdatePair(), InsertLeaf(), Querry()} take much time as compared to previous profiling. \\
+Moreover the functions ( SolveVelocityConstraints() )  related to solving the constraints equations for the joints - \emph{Revolute, Weld and Distance} take more time in comparision.
+
 
 \subsection{Inference from the above Analysis}
+
+\textbf{General Inference}
 We can clearly see that the Debug mode is taking more time for all the functions in comparision to the release mode which does the optimization.\\
 The function \emph{solveVelocityConstraint()} and \emph{solve()} takes more time in both the modes.
 The step function is taking a lot of time in the debug mode as it is the function which is called again and again. \\
@@ -200,15 +211,26 @@ This function is responsible for updating the position of the various objects on
 constraint equation is solved. So it is natural for this function to take more time. \\
 The library \_mcount takes more time in the debug mode but negligible amount in release mode and hence no need to optimize thus library.\\
 
-\subsection{Optimizations Required}
-We clearly see the effect of using the optimization in g++ compling option i.e the \textbf{use of -On option}. The inclusion of the option
-provides various levels of optimizations such as the compiler tries to reduce code size and execution time, without performing any optimizations that take a great deal of compilation time. 
-.GCC performs nearly all supported optimizations that do not involve a space-speed tradeoff. This increases both compilation time and the performance of the generated code.\\
+\textbf{Special Inference wrt Project Objects}
+We can clearly see that the program spends a lot of time in handling the different fixtures.
+The functions which are responsible for obtaining the overlap of fixture proxies - ( the AABB's representation ) and storage
+of these in a dynamic tree consumes lot of time. 
+The behaviour is justified since we have a lot of fixtures which are overlapping and many of them are using collision filtering
+using \emph{filter.groupIndex} . Thus the box2d engine has to spend a lot time to decide which of them to collide and which not.
+Moreover we have 2 bodies - \textbf{tail, neck} which is made of lot of smaller bodies joined together and spaced very close to each other .
+Thus the contact equations are to be solved more often for the fixtures of these bodies.
+Also due to lot of smaller bodies connected to form larger bodies we get a lot of joints of all kinds. Hence the constaint equations for 
+these joints are solved more often thus explaining the cause that SolverVelocityConstraints() of these joints take a large time.
 
-But we also find that there are functions which still take major chunk of time in both modes. Thus these functions must be targeted to be \emph{optimized manually}.
-From the analysis of the previous section we find that functions as - \textbf{\emph{solveVelocityConstraints(), solve() , DrawShape()}} are such functions 
-which takes most times in both modes. Thus we have to find an efficient method to perform the operations performed by these functions such as 
-solving the equations of position and velocity constraints.
+\subsection{Optimizations Required}
+Refering to the above Inference we see that we would have to decrease the number of pieces that makes the tails and the neck. 
+But such a process would result in destroying the flexible movement of the tail and neck and thus changing the expected behaviour.
+So we changed the spacing and arragement of the object in neck . Also for tail the fact that we could initialize the same body with
+different fixtures was used to decrease the number of bodies actually making the tail .\\
+For different fixtures that were using the groupIndex to do collision filtering we tried to expolit the fact we used for tail.
+But the mass distribution which maitained the overall balance of the cheetah on its legs and helped the crank system to make it move smoothly
+got unbalanced cauising some unexplained behaviour . Hence we had to compromise in this optimization by designing the bodies so that balance 
+is also maintained and the overlapping parts overlap as less as aloowed so that the movement is smooth. 
 
 \bibliographystyle{plain}
 
