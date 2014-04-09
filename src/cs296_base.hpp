@@ -171,10 +171,12 @@ namespace cs296
     
  //Cheetah motion is declared here
 	void jump_cheetah();//!< This function makes the cheetah jump
-	void sit_cheetah(); //!< This function makes the cheetah go down
+	void stop_cheetah(); //!< This function makes the cheetah stop at its position
 	void left_cheetah(); //!< This function makes the cheetah move towards left
 	void right_cheetah(); //!< This function makes the cheetah move toward right
-
+	
+	//!< This function RETURNS THE world
+	 b2World* get_world(void){ return m_world;}
     
     //! Virtual destructors - amazing objects. Why are these necessary?
     

@@ -56,7 +56,7 @@ void base_sim_t::jump_cheetah(){
 	 float impulse = cheetahBody->GetMass() ;
     cheetahBody->ApplyLinearImpulse( b2Vec2(0,impulse), cheetahBody->GetWorldCenter() ,1);
 }
-void base_sim_t::sit_cheetah(){
+void base_sim_t::stop_cheetah(){
 	m_motorJoint->SetMotorSpeed(0) ;
 	b2Vec2 vec=cheetahBody->GetLinearVelocity();
 	vec.x=0;

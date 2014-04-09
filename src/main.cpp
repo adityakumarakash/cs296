@@ -24,10 +24,11 @@
 
 //! These are user defined include files
 //! Included in double quotes - the path to find these has to be given at compile time
+#include <iostream>
 #include "render.hpp"
 #include "cs296_base.hpp"
 #include "callbacks.hpp"
-
+#include <sys/time.h>
 //! GLUI is the library used for drawing the GUI
 //! Learn more about GLUI by reading the GLUI documentation
 //! Learn to use preprocessor diectives to make your code portable
@@ -114,13 +115,18 @@ void create_glui_ui(void)
 //! This is the main function
 int main(int argc, char** argv)
 {
+	int no_of_it;
+  if(argc==1)
+	no_of_it=1000;
+  else
+	no_of_it=atoi(argv[1]);
   test_count = 1;
   test_index = 0;
   test_selection = test_index;
   
   entry = sim;
   test = entry->create_fcn();
-
+/*
   //! This initializes GLUT
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
@@ -146,7 +152,37 @@ int main(int argc, char** argv)
   create_glui_ui();
 
   //! Enter the infinite GLUT event loop
-  glutMainLoop();
-  
+  glutMainLoop();*/
+  const b2Profile& p = test->get_world()->GetProfile();
+  float32 tot_time=0,col_time=0,solve_velocity_time=0,solve_pos_time=0;
+  long  double sttime,endtime;
+  timeval tim; 
+  tim.tv_sec=0;
+  tim.tv_usec=0; 
+  settimeofday(&tim,NULL);
+  gettimeofday(&tim,NULL);
+  sttime=tim.tv_sec*1000.0+(tim.tv_usec/1000.0);
+  for (int i = 0; i < no_of_it; i++)
+  {
+	  test->step(&settings);
+	  tot_time += p.step;
+	  col_time+=p.collide;
+	  solve_pos_time+=p.solvePosition;
+	  solve_velocity_time+=p.solveVelocity;
+	//  tot_time += p.step + p.collide + p.solve + p.solveInit + p.solveVelocity + p.solvePosition + p.solveTOI + p.broadphase;		
+  }
+  gettimeofday(&tim,NULL);
+  endtime=tim.tv_sec*1000.0+(tim.tv_usec/1000.0);
+  //printf("%f\n", tot_time);
+  tot_time/=(float)no_of_it;		
+  col_time/=(float)no_of_it;		
+  solve_pos_time/=(float)no_of_it;		
+  solve_velocity_time/=(float)no_of_it;		
+   printf("Number of iterations : %d\n",no_of_it);
+  printf("Average time per step is %.5f ms\n",tot_time);
+  printf("Average time for collisions is %.5f ms\n",col_time);
+  printf("Average time per for velocity updates is %.5f ms\n",solve_velocity_time);
+  printf("Average time per for position updates is %.5f ms\n",solve_pos_time);
+  printf("\nTotal loop time is %Lf ms\n",(endtime-sttime));
   return 0;
 }
