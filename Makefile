@@ -173,7 +173,7 @@ debug_prof:distclean1
 		&& cd ../../../../; \
 	fi;
 	@make exe
-	@perf record -g -- ./mybins/cs296_17_exe
+	@perf record -g -- ./mybins/cs296_17_exe 1000
 	@perf report > g17_debug_prof.dat
 	@perf script | python gprof2dot.py -f perf| dot -Tpng -o ./doc/debug.png
 	@rm perf.data
@@ -193,7 +193,7 @@ release_prof:distclean1
 		&& cd ../../../../; \
 	fi;
 	@make exe1
-	@perf record -g -- ./mybins/cs296_17_exe
+	@perf record -g -- ./mybins/cs296_17_exe 1000
 	@perf report > g17_release_prof.dat
 	@perf script | python gprof2dot.py -f perf | dot -Tpng -o ./doc/release.png
 	@rm perf.data
