@@ -137,6 +137,7 @@ clean:
 	@rm -f $(BINDIR)/* $(OBJDIR)/* $(LIBSDIR)/*
 	@rm -rf ./plots 
 	@rm -rf ./doc/html
+	@rm -f *.log *.log.bak
 	@rm -rf ./doc/*.pdf ./doc/*.log ./doc/*.aux ./doc/*.html ./doc/*.blg ./doc/*.bbl ./doc/*.dvi
 	@rm -rf  *.out
 	@rm -rf ./data/g* ./data/pnp_austen_cs296.txt
@@ -198,20 +199,9 @@ release_prof:distclean1
 	@rm perf.data
 
 report:
-	@if test -e $(BINDIR)/$(TARGET);\
-		then echo "source present" ;\
-		else make exe;\
-	fi;
-	@if test -e ./data/g17_lab09data_01.csv;\
-		then echo "data already present .. run make clean to clear data";\
-		else python3 ./scripts/g17_gen_csv.py ; \
-	fi;
-	@mkdir -p plots 
-	@ipython ./scripts/g17_gen_plots.py
 	@python3 ./scripts/g17_gen_html.py
-	@xdg-open ./doc/g17_lab09_report.html
-
-doc:
+	@gnome-open ./doc/g17_report.html
+	
 	@cd doc \
 	&& pdflatex ./cs296_report_17.tex \
 	&& bibtex ./cs296_report_17 \
@@ -221,3 +211,7 @@ doc:
 	&& pdflatex ./cs296_report_17.tex \
 	&& cd ..
 	@rm -rf ./doc/*.log ./doc/*.aux  ./doc/*.blg ./doc/*.bbl ./doc/*.dvi
+
+doc:
+	@doxygen ./doc/Doxyfile
+	gnome-open ./doc/html/index.html
