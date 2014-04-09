@@ -5,7 +5,7 @@
  */
 
 //! Notice the use of these pre-processor directives on top of each header file
-//! Why are they used?
+//! Preprocessor directives are used to call some processes before the start of the compilation of the program itself
 #ifndef _CALLBACKS_HPP_
 #define _CALLBACKS_HPP_
 

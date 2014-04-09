@@ -26,6 +26,7 @@ using namespace cs296;
 
 base_sim_t::base_sim_t()
 {
+	counter=0;
 	b2Vec2 gravity;
 	gravity.Set(0.0f, -6.0f);
 	m_world = new b2World(gravity);
@@ -52,41 +53,29 @@ base_sim_t::~base_sim_t()
 	m_world = NULL;
 }
 void base_sim_t::jump_cheetah(){
-	/*b2Vec2 vec=cheetahBody->GetLinearVelocity();
-	vec.y=150;
-	cheetahBody->SetLinearVelocity(vec);	*/
-	cheetahBody->ApplyLinearImpulse(b2Vec2(0,100),cheetahBody->GetWorldCenter(),true);
-	//usleep(1000000);
+	 float impulse = cheetahBody->GetMass() ;
+    cheetahBody->ApplyLinearImpulse( b2Vec2(0,impulse), cheetahBody->GetWorldCenter() ,1);
 }
 void base_sim_t::sit_cheetah(){
+	m_motorJoint->SetMotorSpeed(0) ;
 	b2Vec2 vec=cheetahBody->GetLinearVelocity();
-	vec.y-=50;
-	cheetahBody->SetLinearVelocity(vec);		
+	vec.x=0;
+	vec.y=0;
+	cheetahBody->SetLinearVelocity(vec);	
 }
 void base_sim_t::left_cheetah(){
+		m_motorJoint->SetMotorSpeed(-5) ;
 	b2Vec2 vec=cheetahBody->GetLinearVelocity();
-	vec.x-=50;
+	vec.x-=5;
 	cheetahBody->SetLinearVelocity(vec);	
 }
 void base_sim_t::right_cheetah(){
+	m_motorJoint->SetMotorSpeed(5) ;
 	b2Vec2 vec=cheetahBody->GetLinearVelocity();
-	vec.x+=50;
+	vec.x+=5;
 	cheetahBody->SetLinearVelocity(vec);		
 }
-void base_sim_t::legFront(){
-		frontLeg[0]->ApplyAngularImpulse( 2200 ,1);
-		backLeg[0]->ApplyAngularImpulse( 2200 ,1);
-		frontLeg[1]->ApplyAngularImpulse( -2200 ,1);
-		backLeg[1]->ApplyAngularImpulse( -2200 ,1);
-		
-		
-}
-void base_sim_t::legBack(){
-			frontLeg[0]->ApplyAngularImpulse( -2200,1 );
-		backLeg[0]->ApplyAngularImpulse( -2200 ,1);
-		frontLeg[1]->ApplyAngularImpulse( 2200 ,1);
-		backLeg[1]->ApplyAngularImpulse( 2200 ,1);
-}
+
 void base_sim_t::pre_solve(b2Contact* contact, const b2Manifold* oldManifold)
 {
   const b2Manifold* manifold = contact->GetManifold();
