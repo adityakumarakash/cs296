@@ -28,10 +28,18 @@
 namespace cs296
 {
   //! This is the class that sets up the Box2D simulation world
-  //! Notice the public inheritance - why do we inherit the base_sim_t class?
+  //! Notice the public inheritance 
+  /**
+   * Here we inherit dominos_t class from the base_sim_t class
+   * This inheritence helps to inherit the variables and member
+   * functions which are the oart of base_sim_t class
+   * 
+   * These member function and variables will help in the runnig of the simulatiom
+   * */
   class dominos_t : public base_sim_t
   {
   public:
+    
     
     dominos_t();
     
@@ -39,6 +47,7 @@ namespace cs296
     {
       return new dominos_t;
     }
+    void  CreateLeg(float32 s, const b2Vec2& wheelAnchor);
   };
 }
   

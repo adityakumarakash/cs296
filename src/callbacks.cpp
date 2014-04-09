@@ -118,16 +118,16 @@ namespace cs296
       test->sit_cheetah();
       break;
       
-     //! Press 'a' to make cheetah jump 
+     //! Press 'a' to make cheetah go front
      case 'A':
      case 'a':
-      test->legBack();
+      test->left_cheetah();
       break;
       
-      //! Press 'd' to make cheetah jump 
+      //! Press 'd' to make cheetah go back
      case 'D':
      case 'd':
-      test->legFront();
+      test->right_cheetah();
       break;
       
     //! Press 'r' to reset.
