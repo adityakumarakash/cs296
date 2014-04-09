@@ -112,10 +112,10 @@ namespace cs296
       test->jump_cheetah();
       break;
      
-      //! Press 's' to make cheetah jump 
+      //! Press 's' to make cheetah stop
      case 'S':
      case 's':
-      test->sit_cheetah();
+      test->stop_cheetah();
       break;
       
      //! Press 'a' to make cheetah go front

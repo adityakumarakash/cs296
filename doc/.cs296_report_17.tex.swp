@@ -1,0 +1,218 @@
+%hello document
+
+
+\documentclass[11pt]{article}
+\usepackage[top=2.54cm, bottom=2.54cm,left=1.27cm,right=1.27cm]{geometry}
+\usepackage{graphicx} 
+\usepackage{cite}
+\usepackage{setspace}
+\usepackage{listings}
+
+\begin{document}
+
+\title{Project Report for CS296 \\ Cheetah Simulation \\ Group 17}
+\author{Naveen Sagar\\120050026 ,
+ \texttt{120050026@cse.iitb.ac.in} \\
+\and
+Aditya Kumar Akash\\120050046 , \texttt{adityaakash@cse.iitb.ac.in} \\ 
+\and
+Prateek Chandan\\120050042 , \texttt{prateekchandan@cse.iitb.ac.in} \\
+}
+\date{\today}
+\maketitle 
+\newpage
+
+\section{Indroduction}
+This document gives details of the Project report for the course CS296 Software Systems Laboratory, taken by Prof Parag Chaudhary\cite{sir}. 
+It contains The details of the new cheetah simulation.Cheetah is the fastest running animal on the planet.In out Box2D simulation project we have tried to model the simulation of cheetah's body , its balancing along with it's basic motion like walk and jump \\
+\section{The Aniamtion}
+
+\subsection{Model submitted in abstract}
+The model submitted in the project proposal was : \\
+Each legs has three moving parts connected to a hinge which is shown in the diagram. They can rotate and give motion to the model. Also the rib , tail and the neck of the model is made of small polygons which can swing and maitain the body of the cheetah.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[scale=0.6]{drawing.png}
+		\caption{The model submitted in abstract}
+\end{figure}
+\subsection{Final Box2d Model of the Cheetah}
+The model submitted in the project proposal was : \\
+Each legs has three moving parts connected to a hinge which is shown in the diagram. They can rotate and give motion to the model. Also the rib , tail and the neck of the model is made of small polygons which can swing and maitain the body of the cheetah.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[scale=0.4]{final.png}
+		\caption{The completed model in Box2D}
+\end{figure}
+\subsection{Deviation from the design}
+\paragraph{Removals}
+The part which is missed in the final design in the rib of the cheetah. The main reason to remove it was the balancing problem of the cheetah. As due to the changed and different body parts , a firm center part was required
+\paragraph{Additions}
+Wee added the muscles to the leg of the cheetah making the balancing of the cheetah to be more realistic and also we added Theo Jansen\cite{jansen} Walking mechanism for Cheetah which is a wheel based walking mechanism
+\section{Physics behind the simulation and details of the mechanism used}
+This section contains information about the different parts of cheetas body which is used in the animation
+\begin{enumerate}
+	  \item Walking Mechanism
+	  \item The legs and Muscles
+   	 \item The Tail
+     \item Neck and Head
+     \item Main body
+\end{enumerate}
+\subsection{Walking Mechanism}
+The Walking Mechanism of cheetah is based on Theo Jansesn\cite{jansen} walking mechanism
+\paragraph{Theo Jansen linkage}
+It is a “crank-based” where the circular movement of
+one point in the linkage translates to movement elsewhere in the linkage; this means the
+circularly moving part of the li
+nkage can be attached to a crank so that the motion of the
+mechanism is easily driven allowing easy locomotion
+
+\paragraph{}
+\begin{figure}[!ht]
+    \centering
+        \includegraphics[scale=0.6]{jansen.png}
+        \caption{The image showing Walking Mechanism}
+\end{figure}
+
+
+\subsection{The legs and Muscles}
+\paragraph{Description of Leg}
+There are 4 legs in total of the cheetah two in the front while two in the back. Each of the leg consists of two bony parts joined by the revolute joints with constraint in  the angle of rotation so as to maintain the shape of the leg\\
+These legs are then joined by the theo jansen walking mechanism
+\paragraph{Distance Joints as Muscles}
+The walking mechanism is joined by distance joint which acts as springs which act as shock absorber for cheetah. It also helps in balancing of the body and legs after few deformations
+
+\paragraph{}
+\begin{figure}[!ht]
+    \centering
+        \includegraphics[scale=0.8]{joint.png}
+        \caption{The image showing Distance joints as muscles}
+\end{figure}
+
+\subsection{The Tail}
+\paragraph{} 
+This part is cheetah's tail which consists of multiple small blocks joined together with revolute joints.The revolute joint in the tail is constrained with the the angle constaints . Total sum of constraint in the allows it to move totally while maintaining its initial shape. Since tail is the highly important in maintaining the body balance its weight is accurately set so that it gives proper motion to body
+\newline
+Each of the block itself is made of two rectangular blocks joined together
+
+
+Due to the tail the angular mometum of the cheetah's body is balanced
+\begin{figure}[!ht]
+    \centering
+        \includegraphics[scale=0.6]{tail.png}
+        \caption{The image of tail consisting of multiple joints}
+\end{figure}
+\subsection{Head and the Neck}
+\paragraph{} 
+The head of the cheetah is a normal body mady of a convex polygon.While the neck is far more interesting. Thr neck consists of three blockes joined and packed closely with a revolute joint. This helps in the swingning motion of the neck of the cheetah.
+\\
+\begin{figure}[!ht]
+    \centering
+        \includegraphics[scale=0.8]{head.png}
+        \caption{The neck and head of cheetah}
+\end{figure}
+\subsection{Main body of cheetah}
+\paragraph{} 
+The main body of cheetah consists of a wide rectangular box to which all other parts of cheetah is joined. It acts a support for the whole body and helps in controlling the mwalking and jumping mechanism of cheetah.
+
+The walking mechanism is at the center of this body and it controls whole of the walking of the cheetah
+
+\section{What makes the Simulation Interesting}
+
+The cheetah is the fastest land animal, achieving a top speed of about 70 mph (113 kph)\cite{facts} This is the main motivation toward taking up of this project. But owing the the restrictions of Box2D we tried to stimulate some of the parts of Cheetah's body and balancing and other details. Making a prototype of Living Organism which is the most complex machines makes our simulation interesting\\
+
+While running the simulation you can see the swift swinging motion of tail, the motion of the head. Make the cheetah jum high and then land it to the ground. You can see the detailing of the landing and balancing. Such things also make the simulation interesting
+\section{Profiling report of the code }
+\paragraph{}
+Using the profiling technique used in Lab09 we profiled the simulation of cheetah to find out the results
+ 
+ \emph{We have used perf profiler to make the profile data.}\\
+ \emph{No of iteration for data : 10000}
+
+\subsection{Call Graphs}
+A call graph is a directed graph that represents calling relationships between subroutines in a computer program.
+Specifically, each node represents a procedure and each edge indicates that procedure f calls procedure g.\\
+
+\textbf{Generation of call graph using perf and the gprof2dot.py} \\
+\begin{lstlisting}
+perf record -g -- ./mybins/cs296_17_exe
+perf report > g17_release_prof.dat
+perf script | python gprof2dot.py -f perf | dot -Tpng -o release.png
+\end{lstlisting}
+
+\begin{figure}[h!]
+	\centering	
+		\includegraphics[width=1\textwidth]{debug.png}
+		\caption{Debug Call Graph}
+\end{figure}
+
+\subsection*{Observation from Debug Call Graph}
+List of Functions which consume most time
+\begin{enumerate}
+    \item base\_sim\_t:step() 96.96a \%
+    \item b2World::step() 91.82 \%
+    \item b2World::solve() 80.01\%
+    \item b2Island::solve() 47.32\%
+    \item b2RevoluteJoint::SolveVelocityConstraints() 8.71\%
+    \item b2DistanceJoint::SolveVelocityConstraints() 9.86\%
+    \item b2weldJoint::SolveVelocityConstraints() 2.20\%
+    \item b2World::DrawShape() 10.35 \%
+    \item b2Body::SynchronizeFixture() 19.88 \%
+     \item b2Fixture::SynchronizeFixture() 18.63 \%
+    \item b2World::DrawDebugData() 11.30 \%
+
+\end{enumerate}
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=1\textwidth]{release.png}
+			\caption{Release Call Graphs}
+\end{figure}
+
+\subsection*{Observation from Release Call Graph}
+List of Functions which consume most time
+\begin{enumerate}
+    \item b2World::solve() 13.35\%
+    \item b2contactSolver::SolveVelocityConstraints() 14.36\%
+    \item b2World::DrawShape() 19.05 \%
+    \item lib-2.17.so \_sincost 15.06 \%
+    \item lib-2.17.so \_mcount 1.47 \%
+    \item lib-2.17.so \_mcount\_internal 1.05 \%
+\end{enumerate}
+
+\subsection{Analysis of above Call Graphs}
+\textbf{Debug Mode} :\\
+As we can see from the callgraph and the most time consuming functions , debug mode calls much more functions as compared to the call graph of release mode.
+Most of the time is consumed by the calculating functions which are solve , solveVelocityContraints etc 
+ consumes most of the time as compared to the Drawshape funstion and drawDebug function\\
+\textbf{Release Mode} :\\
+As opposed to the times in Debug mode , The Drawshape function take the most time in the running of the function while the solving function functions like
+solveVelocityContraints and solve function took time much lesser than that in debug mode. also the system library used for calculation took very less
+time 
+
+\subsection{Inference from the above Analysis}
+We can clearly see that the Debug mode is taking more time for all the functions in comparision to the release mode which does the optimization.\\
+The function \emph{solveVelocityConstraint()} and \emph{solve()} takes more time in both the modes.
+The step function is taking a lot of time in the debug mode as it is the function which is called again and again. \\
+The \emph{DrawShape()} takes significant amount of time as this function is called each time the \emph{step()} function is called.
+This function is responsible for updating the position of the various objects on the frame after the solving of all velocity and position 
+constraint equation is solved. So it is natural for this function to take more time. \\
+The library \_mcount takes more time in the debug mode but negligible amount in release mode and hence no need to optimize thus library.\\
+
+\subsection{Optimizations Required}
+We clearly see the effect of using the optimization in g++ compling option i.e the \textbf{use of -On option}. The inclusion of the option
+provides various levels of optimizations such as the compiler tries to reduce code size and execution time, without performing any optimizations that take a great deal of compilation time. 
+.GCC performs nearly all supported optimizations that do not involve a space-speed tradeoff. This increases both compilation time and the performance of the generated code.\\
+
+But we also find that there are functions which still take major chunk of time in both modes. Thus these functions must be targeted to be \emph{optimized manually}.
+From the analysis of the previous section we find that functions as - \textbf{\emph{solveVelocityConstraints(), solve() , DrawShape()}} are such functions 
+which takes most times in both modes. Thus we have to find an efficient method to perform the operations performed by these functions such as 
+solving the equations of position and velocity constraints.
+
+\bibliographystyle{plain}
+
+\bibliography{cs296_report_17}
+
+\end{document}
+
