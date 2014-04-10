@@ -73,7 +73,8 @@ setup:
 	fi;
 dist:distclean
 	@tar -zcf ./cs296_g17_project.tar.gz *
-install:exe doc
+	@echo "Distributable created as cs296_g17_project.tar.gz"
+install:exe doc plot
 	@tar -zcf ./cs296_g17_project_install.tar.gz ./scripts ./doc ./mybins ./plots
 	@if test -d $(INSTALL_ROOT); \
 	then echo "Install folder present"; \
@@ -86,6 +87,7 @@ install:exe doc
 	@echo "Installing in folder $(INSTALL_ROOT)"
 	@mv ./cs296_g17_project_install.tar.gz $(INSTALL_ROOT)/cs296_g17_project
 	@cp ./dist/Makefile $(INSTALL_ROOT)/cs296_g17_project/Makefile
+	@cp ./dist/Readme.txt $(INSTALL_ROOT)/cs296_g17_project/Readme.txt
 	@cd $(INSTALL_ROOT)/cs296_g17_project \
 	&& tar -xzf cs296_g17_project_install.tar.gz \
 	&& rm ./cs296_g17_project_install.tar.gz 
