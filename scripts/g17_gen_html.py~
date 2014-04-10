@@ -63,6 +63,6 @@ for line in alllines[1:]:
 	
 	if match:
 		outfile.write("<br>")
-outfile.write("<footer>Project made as a part of CS296 Lab IIT Bombay<div class='link'><a target=_blank href='http://www.cse.iitb.ac.in/~prateekchandan/cs296' >Link to the Project Webpage</a></div></footer>")
+outfile.write("<footer>Project made as a part of CS296 Lab IIT Bombay<div class='link'><a href='http://www.cse.iitb.ac.in/~prateekchandan/cs296' >Link to the Project Webpage</a></div></footer>")
 outfile.write("</body></html>")	
 print("html report generated in doc/g17_lab09_report.html")
