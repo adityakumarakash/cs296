@@ -232,6 +232,94 @@ But the mass distribution which maitained the overall balance of the cheetah on 
 got unbalanced cauising some unexplained behaviour . Hence we had to compromise in this optimization by designing the bodies so that balance 
 is also maintained and the overlapping parts overlap as less as aloowed so that the movement is smooth. 
 
+\section{Analysis Report for the plots my Matplotlib}
+This section contains the Reports , Obsevations and Inference from the timing diagram which are obtained from the data and the 
+Plots generated using matplotlib of the project simulation.\\
+No of Iteration for which the 	the iteration was run for 1 to 500 and 50 rerun for each iteration
+\subsection{Observation from Plot1}
+The following inference were drawn from the Plot1 diagram which was Plot of Average Step time  and Average loop time:
+\begin{enumerate}
+    \item The Average loop time is greater than the Average Step Time but is almost equal
+    \item The average time for the decreases as the no of iteration increases
+\end{enumerate}
+\textbf{Explanation:}
+Since for the first few iterations the world is being set and all the objects in a state of movement to get settled to there stable state
+and also the no of of collisions taking place are too high, the time taken by the Loop in fisrt few Interation are High.
+But as he loop progresses the animation gradually takes place without much calcualtion or updates and the updates are very few so the time for 
+the further loops decreases. Due to this the average time for more iterations decreases as compared o lesser no of Iterations\\
+
+Since the step time is the of all times taken by the loop while the loop time is the total time taken by the loop in addition to the Time 
+taken by system processes so the loop time is slightly greater than the step time. And when the same was generated while the sytem was overloaded 
+with programs, This gap was still greater.
+\begin{figure}[!ht]
+	\centering
+	\caption{Plot1}
+		\includegraphics[scale=0.5]{../plots/g17_plot01.png}
+\end{figure}
+\subsection{Observation from Plot2}
+The following inference were drawn from the Plot2 diagram which was Plot of Step time , Collision time , Velocity update time , Position update time
+and sum of last 3 averaged:
+\begin{enumerate}
+    \item The step time is greater than the sum of Collision time , velocity update time and position update time
+    \item All of these times decreases as the no of iteration increases
+\end{enumerate}
+\textbf{Explanation:}
+The step time is the time taken by the loop which is running the Animation. But the other three times are exactly what they are meant to be.
+But since the step time is the time taken by all of the things within a loop , So there are other processes which will also be called within the for loop 
+and they will take time increasing the step tme\\
+
+The explnation for initial times to be greater as the explanation in of Plot1
+\begin{figure}[!ht]
+	\centering
+	\caption{Plot2}
+		\includegraphics[scale=0.5]{../plots/g17_plot02.png}
+\end{figure}
+\subsection{Observation from Plot3}
+The plot3 was the plot of averaged step time along with error bars calculated with standard deviation\\
+
+It is observed that the error bars for the average stem time for lower no of iterations was too high as compared to the error
+ bar for higher no of iterations \\
+ 
+This might be because of the reasons explained in Plot1. Since the setting of world can take place differently for only one iteration because of 
+setting up of worlds and setting up of initial position of objects so the error bar is too high. But when the no of iteration is high, This total 
+time sums up to almost be equal. So the standard deviation is low making the error bar to be small. 
+\begin{figure}[!ht]
+	\centering
+	\caption{Plot3}
+		\includegraphics[scale=0.5]{../plots/g17_plot03.png}
+\end{figure}
+\subsection{Observation from Plot4}
+When the step time gets averaged up it keeps fluctuating around the the average value which comes out to be 
+0.94 second and the rest of the times are around it.\\
+
+But there is an Outlier time which denotes the time at the start of the loop. Since  At the beggining the times are higher so they 
+contribute for a frequency of a higher time
+\begin{figure}[!ht]
+	\centering
+	\caption{Plot4}
+		\includegraphics[scale=0.5]{../plots/g17_plot04.png}
+\end{figure}
+\subsection{Observation from Plot5}
+Plot 5 was the plot for the best fit line for the step time averaged over all data and step time averaged over some random data
+\begin{enumerate}
+    \item The points for the averaged time of all data and random data are almost equal 
+    \item The best fit line comes to be almost same for both of them
+\end{enumerate}
+\textbf{Explanation:}
+	Since the time for a particular iteration is almost the same so it doesnt matter much if the points are averaged over all data or 
+the  points are averaged over only few random data. Due to this the points comes to be nearly the same and also the best fit line is nearly 
+the same
+\begin{figure}[!ht]
+	\centering
+	\caption{Plot5}
+		\includegraphics[scale=0.5]{../plots/g17_plot05.png}
+\end{figure}
+\section{Conclusion}
+\paragraph{Project}
+The cheetah simulation along with finishing of the project was very intersting and of great learnig experience. We learnt various aspects of complex machine simulation , different walking mechanism used by cheetah , Implementation in box2D with a simpler walking mechanism , simulating body parts like tail and neck of the cheetah and other things. The amount of learning experience from this project was too great.
+\paragraph{CS296 course}
+This CS296 was overall a great learning ecperience of Box2D and also other software development techniques. In the CS296 course as a whole we learnt a lot and we are very thankful to the instructor Prof Parag Chaudhary\cite{sir}. The software development techniques learnt and the other very usefull softwares learnt has increased \emph{geekiness} in us. And we will continue our the Coding aspect followed up from this course.
+
 \bibliographystyle{plain}
 
 \bibliography{cs296_report_17}

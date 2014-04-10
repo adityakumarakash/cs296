@@ -18,7 +18,7 @@ LIBDIR= $(EXTERNAL_ROOT)/lib
 LIBSDIR=$(PROJECT_ROOT)/mylibs
 SCRIPTDIR=$(PROJECT_ROOT)/scripts
 #installation folder
-INSTALL_ROOT = ~/Desktop/fart
+INSTALL_ROOT = ../g17_project_distributable
 #compiler options
 CC=g++
 PRINTF=printf
@@ -71,9 +71,10 @@ setup:
 		&& make install \
 		&& cd ../../../../; \
 	fi;
-dist:exe doc
-	@tar -zcf ./cs296_g17_project.tar.gz ./scripts ./doc ./mybins 
-install:
+dist:distclean
+	@tar -zcf ./cs296_g17_project.tar.gz *
+install:exe doc
+	@tar -zcf ./cs296_g17_project_install.tar.gz ./scripts ./doc ./mybins ./plots
 	@if test -d $(INSTALL_ROOT); \
 	then echo "Install folder present"; \
 	else mkdir $(INSTALL_ROOT);\
@@ -82,11 +83,12 @@ install:
 	then echo "folder present"; \
 	else mkdir $(INSTALL_ROOT)/cs296_g17_project;\
 	fi;
-	@cp ./cs296_g17_project.tar.gz $(INSTALL_ROOT)/cs296_g17_project
+	@echo "Installing in folder $(INSTALL_ROOT)"
+	@mv ./cs296_g17_project_install.tar.gz $(INSTALL_ROOT)/cs296_g17_project
 	@cp ./dist/Makefile $(INSTALL_ROOT)/cs296_g17_project/Makefile
 	@cd $(INSTALL_ROOT)/cs296_g17_project \
-	&& tar -xzf cs296_g17_project.tar.gz \
-	&& rm ./cs296_g17_project.tar.gz 
+	&& tar -xzf cs296_g17_project_install.tar.gz \
+	&& rm ./cs296_g17_project_install.tar.gz 
 exe1: CPPFLAGS+= -O3
 exe1: $(BINDIR)/$(TARGET)
 exe:setup $(BINDIR)/$(TARGET)
@@ -152,6 +154,11 @@ distclean1: clean
 	
 distclean:cleandat distclean1
 plot:
+	@if test -e data/g17_data_01.csv; \
+		then echo ""; \
+		else mkdir -p data\
+		&&python3 ./scripts/g17_gen_csv.py; \
+	fi;
 	@mkdir -p plots
 	@ipython ./scripts/g17_gen_plots.py
 
@@ -199,6 +206,10 @@ release_prof:distclean1
 	@rm perf.data
 
 report:
+	@if test -e ./plots/g17_plot05.png;\
+		then echo "plots already present";\
+		else make plot ; \
+	fi;
 	@python3 ./scripts/g17_gen_html.py
 	@gnome-open ./doc/g17_report.html
 	
