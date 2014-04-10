@@ -71,8 +71,8 @@ setup:
 		&& make install \
 		&& cd ../../../../; \
 	fi;
-dist:distclean
-	@tar -zcf ./cs296_g17_project.tar.gz ./*
+dist:exe doc
+	@tar -zcf ./cs296_g17_project.tar.gz ./scripts ./doc ./mybins 
 install:
 	@if test -d $(INSTALL_ROOT); \
 	then echo "Install folder present"; \
@@ -82,11 +82,11 @@ install:
 	then echo "folder present"; \
 	else mkdir $(INSTALL_ROOT)/cs296_g17_project;\
 	fi;
-	@cp ./cs296_g17_project.tar.gz $(INSTALL_ROOT)/cs296_g17_project	
+	@cp ./cs296_g17_project.tar.gz $(INSTALL_ROOT)/cs296_g17_project
+	@cp ./dist/Makefile $(INSTALL_ROOT)/cs296_g17_project/Makefile
 	@cd $(INSTALL_ROOT)/cs296_g17_project \
-	&& tar -xvzf cs296_g17_project.tar.gz \
-	&& rm ./cs296_g17_project.tar.gz \
-	&& make
+	&& tar -xzf cs296_g17_project.tar.gz \
+	&& rm ./cs296_g17_project.tar.gz 
 exe1: CPPFLAGS+= -O3
 exe1: $(BINDIR)/$(TARGET)
 exe:setup $(BINDIR)/$(TARGET)
@@ -214,4 +214,4 @@ report:
 
 doc:
 	@doxygen ./doc/Doxyfile
-	gnome-open ./doc/html/index.html
+	
