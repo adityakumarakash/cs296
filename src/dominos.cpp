@@ -69,6 +69,22 @@ namespace cs296
 		fd2.filter.groupIndex = -1;
 		fd1.density = 1.0f;
 		fd2.density = 1.0f;
+ /*! \brief 
+  *
+  * name -poly1 <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Define a polygon shape which is used in cheetah<br>
+  * 
+  */
+   /*! \brief 
+  *
+  * name -poly2 <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Defines a polygon which is used in cheetah<br>
+  * 
+  */
 
 		b2PolygonShape poly1, poly2;
 
@@ -103,7 +119,18 @@ namespace cs296
 
 		fd1.shape = &poly1;
 		fd2.shape = &poly2;
-
+/*!		
+ * name -bd1 <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for ------ <br>
+  */
+  /*!		
+ * name -bd2 <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for ------ <br>
+  */
 		b2BodyDef bd1, bd2;
 		bd1.type = b2_dynamicBody;
 		bd2.type = b2_dynamicBody;
@@ -119,6 +146,13 @@ namespace cs296
 		body1->CreateFixture(&fd1);
 		body2->CreateFixture(&fd2);
 
+  /*! \brief 
+  * name -distancejoint <br>
+  * datatype -b2DistanceJointDef <br>
+  * operation -Defining an spring joint between two bodies to staility <br>
+  * value - this joins body1 and body2<br>
+  * 
+  */
 		b2DistanceJointDef distanceJoint;
 
 		distanceJoint.dampingRatio = 0.7f;
@@ -135,7 +169,12 @@ namespace cs296
 
 		distanceJoint.Initialize(body2, m_wheel, p6 + m_offset, wheelAnchor + m_offset);
 		m_world->CreateJoint(&distanceJoint);
-
+		/*!
+ * name -rjd <br>
+  * datatype -b2RevoluteJointDef <br>
+  * operation -Defining an anchor point where the bodies are joined. <br>
+  * value - Joints the body2 and cheetahBody<br>
+  */
 		b2RevoluteJointDef rjd;
 
 		rjd.Initialize(body2, cheetahBody, p4 + m_offset);
@@ -146,6 +185,38 @@ namespace cs296
 		if(s == -1)
 		{
 			// making the first leg part 1
+			/*!
+ * name -leg1 <br>
+  * datatype -b2Body* <br>
+  * operation -Pointer to b2Body object. <br>
+  * value - This contains pointer to the leg1<br>
+  */
+  /*!
+ * name -leg2 <br>
+  * datatype -b2Body* <br>
+  * operation -Pointer to b2Body object. <br>
+  * value - This contains pointer to the leg2<br>
+  */
+  /*!		
+ * name -bodydef <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for the parts of leg <br>
+  */
+		 /*! \brief 
+  *
+  * name -shape <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Shape for the leg of the cheetah<br>
+  * 
+  */
+  /*!
+   * name -fixture <br>
+  * datatype -b2FixtureDef <br>
+  * operation -Used to attach a shape to a body for collision detection <br>
+  * value - Defines a fixture for the leg of the cheetah<br>
+  */
 			b2Body* leg1;	
 			b2Body* leg2;
 			
@@ -190,7 +261,13 @@ namespace cs296
 			}	
 			
 			{
-				// joining the toes to the last bony part 
+				// joining the toes to the last body part 
+				/*!
+    * name -joint <br>
+  * datatype - b2WeldJointDef <br>
+  * operation -Defining a joint which joins two bodies rigidly <br>
+  * value - Joints the leg1 and body1<br>
+  */
 				b2WeldJointDef joint;
 				b2Vec2 vec;
 				vec.Set(m_offset.x + -14.1f, m_offset.y + -13.0f);
@@ -200,15 +277,51 @@ namespace cs296
 			
 			{	
 				// now joining joint1
-				b2WeldJointDef joint;
+				
+				b2WeldJointDef joint;//!joins the two parts of a leg
 				b2Vec2 vec(m_offset.x + -12.0f, m_offset.y + -17.5f);
 				joint.Initialize(leg2, leg1, vec);
 				m_world->CreateJoint(&joint);
 			}
 			
 		}
+		
+			/*!
+ * name -leg1 <br>
+  * datatype -b2Body* <br>
+  * operation -Pointer to b2Body object. <br>
+  * value - This contains pointer to the leg1<br>
+  */
+  /*!
+ * name -leg2 <br>
+  * datatype -b2Body* <br>
+  * operation -Pointer to b2Body object. <br>
+  * value - This contains pointer to the leg2<br>
+  */
+  /*!		
+ * name -bodydef <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for the parts of leg <br>
+  */
+		 /*! \brief 
+  *
+  * name -shape <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Shape for the leg of the cheetah<br>
+  * 
+  */
+  /*!
+   * name -fixture <br>
+  * datatype -b2FixtureDef <br>
+  * operation -Used to attach a shape to a body for collision detection <br>
+  * value - Defines a fixture for the leg of the cheetah<br>
+  */
 		else 		// back legs
 		{
+			
+			
 			// making the first leg part 1
 			b2Body* leg1;	
 			b2Body* leg2;
@@ -252,7 +365,12 @@ namespace cs296
 				leg2 = m_world->CreateBody(&bodyDef);
 				leg2->CreateFixture(&fixture);
 			}
-			
+				/*!
+    * name -joint <br>
+  * datatype - b2WeldJointDef <br>
+  * operation -Defining a joint which joins two bodies rigidly <br>
+  * value - Joints the leg1 and body1<br>
+  */		
 			{
 				// joining the toes to the last bony part 
 				b2WeldJointDef joint;
@@ -264,7 +382,7 @@ namespace cs296
 			
 			{	
 				// now joining joint1
-				b2WeldJointDef joint;
+				b2WeldJointDef joint;//!joins the two parts of the leg
 				b2Vec2 vec(m_offset.x + 15.0f, m_offset.y + -20.5f);
 				joint.Initialize(leg2, leg1, vec);
 				m_world->CreateJoint(&joint);
@@ -279,6 +397,24 @@ namespace cs296
   {
 	  
 	  //GROUND
+	  /*!
+ * name -ground <br>
+  * datatype -b2Body* <br>
+  * operation -Pointer to b2Body object. <br>
+  * value - This contains pointer to the ground<br>
+  */
+  /*!
+   * name -shape <br>
+  * datatype -b2EdgeShape <br>
+  * operation -Defines an edge between two given vectors. <br>
+  * value - Contains the shape for ground<br>
+  */
+  /*!		
+ * name -bd <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for ground <br>
+  */
 	  {
 		  b2Body* ground;
 		  b2EdgeShape shape;
@@ -295,6 +431,27 @@ namespace cs296
 		b2Vec2 pivot(0.0f, 0.8f);
 
 		// The main body part named cheetahbody
+		  /*! \brief 
+  *
+  * name -shape <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Shape for cheetahbody(rectangle which support the whole body)<br>
+  * 
+  */
+   /*!
+   * name -sd <br>
+  * datatype -b2FixtureDef <br>
+  * operation -Used to attach a shape to a body for collision detection <br>
+  * value - Defines a fixture for cheetah body<br>
+  */
+  /*!		
+ * name -bd <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for the cheetah body <br>
+  */
+
 		{
 			b2PolygonShape shape;
 			shape.SetAsBox(20.0f, 2.0f);
@@ -311,7 +468,19 @@ namespace cs296
 			cheetahBody = m_world->CreateBody(&bd);
 			cheetahBody->CreateFixture(&sd);
 		}
-
+/*!
+  * name -shape <br>
+  * datatype -b2CircleShape <br>
+  * operation -Defines an circle shape with a radius <br>
+  * value - A cirlce if radius c*1.6<br>
+  *
+  */
+   /*!
+   * name -sd <br>
+  * datatype -b2FixtureDef <br>
+  * operation -Used to attach a shape to a body for collision detection <br>
+  * value - Defines a fixture for cirlce<br>
+  */ 
 		{
 			b2CircleShape shape;
 			shape.m_radius = c * 1.6f;
@@ -336,7 +505,8 @@ namespace cs296
 			m_motorJoint = (b2RevoluteJoint*)m_world->CreateJoint(&mainwheel);
 		}
 
-		b2Vec2 wheelAnchor;
+		b2Vec2 wheelAnchor;//! THis defines a anchor for the wheel 
+		
 		
 		wheelAnchor = pivot + b2Vec2(0.0f, -1.2f);
 		val=1;
@@ -347,11 +517,43 @@ namespace cs296
 		CreateLeg( -1.0f, wheelAnchor);
 		CreateLeg( 1.0f, wheelAnchor);
 		
-		
-		
+	/*!	
+		   * name -jd <br>
+  * datatype -b2RevoluteJointDef <br>
+  * operation -Defining an anchor point where the bodies are joined. <br>
+  * value - Joints two parts <br>
+  */
 		b2RevoluteJointDef jd;
-		  b2Vec2 anchor;
+		
+		  b2Vec2 anchor;//!works as an anchor two join two parts
 		  //HEAD
+/*!
+ * name -head <br>
+  * datatype -b2Body* <br>
+  * operation -Pointer to b2Body object. <br>
+  * value - This contains pointer to the head of the cheetah<br>
+  */
+    /*! \brief 
+  *
+  * name -poly <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Shape for the head of the cheetah<br>
+  * 
+  */
+  /*!		
+ * name -bd <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for the head of the cheetah <br>
+  */
+  /*!
+   * name -fd <br>
+  * datatype -b2FixtureDef <br>
+  * operation -Used to attach a shape to a body for collision detection <br>
+  * value - Defines a fixture for the head<br>
+  */
+ 
 			b2Vec2 headref(m_offset.x + 5.4f, m_offset.y  + -32.0f);
 		  b2Body* head;
 		  {
@@ -381,6 +583,38 @@ namespace cs296
 		 
 		 
 		  //MAIN B0DY
+		  /*!
+ * name -mainbody <br>
+  * datatype -b2Body* <br>
+  * operation -Pointer to b2Body object. <br>
+  * value - This contains pointer to the main body<br>
+  */
+   /*! \brief 
+  *
+  * name -poly <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Shape for main body of the cheetah<br>
+  * 
+  */
+  /*!		
+ * name -bd <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for main body of the cheetah <br>
+  */
+   /*!
+   * name -fd <br>
+  * datatype -b2FixtureDef <br>
+  * operation -Used to attach a shape to a body for collision detection <br>
+  * value - Defines a fixture for main body of the cheetah<br>
+  */
+  /*!
+    * name -jd1 <br>
+  * datatype - b2WeldJointDef <br>
+  * operation -Defining a joint which joins two bodies rigidly <br>
+  * value - Joints the cheetahbody and mainbody<br>
+  */
 		  b2Vec2 bodyref(m_offset.x + 6.0f, m_offset.y  + -32.0f);
 		  
 		  
@@ -418,6 +652,46 @@ namespace cs296
 		  
 		  
 		//NECK
+/*!
+ * name -neck[3] <br>
+  * datatype -b2Body* <br>
+  * operation -Pointer to b2Body object. <br>
+  * value - This contains array of pointers to the neck part of the cheetah<br>
+  */
+  /*! \brief 
+  *
+  * name -hrev <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Shape for horizontal box of the pieces of neck<br>
+  * 
+  */
+  /*! \brief 
+  *
+  * name -vrev <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Shape for vertical part of the pieces of neck<br>
+  * 
+  */
+  /*!		
+ * name -bd2 <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for parts of the neck of the cheetah <br>
+  */
+  /*!
+   * name -fd2 <br>
+  * datatype -b2FixtureDef <br>
+  * operation -Used to attach a shape to a body for collision detection <br>
+  * value - Defines a fixture for the parts of the neck of the cheetah<br>
+  */
+  /*!
+    * name -jd1 <br>
+  * datatype - b2WeldJointDef <br>
+  * operation -Defining a joint which joins two bodies rigidly <br>
+  * value - Joints the neck[i] and neck[i-1] for i=1,2<br>
+  */
 		b2Vec2 neckref(m_offset.x + 11.3f, m_offset.y  + -33.5f);
 		b2Body* neck[3];
 		{
@@ -464,6 +738,32 @@ namespace cs296
 	
 	  
 	//Hip
+/*!
+ * name -hip <br>
+  * datatype -b2Body* <br>
+  * operation -Pointer to b2Body object. <br>
+  * value - This contains pointer to the hip part of the cheetah<br>
+  */
+  /*!  
+  *
+  * name poly <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define a convex Polygon. <br>
+  * value - Shape for hip part of the cheetah<br>
+  * 
+  */
+  /*!
+  * name -hipfd <br>
+  * datatype -b2FixtureDef <br>
+  * operation -Used to attach a shape to a body for collision detection <br>
+  * value - Defines a fixture for hip part of the cheetah<br>
+  */ 
+  /*!		
+ * name -hipbd <br>
+  * datatype -b2BodyDef <br>
+  * operation -Holds all the data needed to construct a rigid body. <br>
+  * value -Contains all data for hip part of the cheetah <br>
+  */
 	b2Vec2 hipref(m_offset.x + 0.5f, m_offset.y  + -32.0f);
 	  b2Body* hip;
 	  {
@@ -485,6 +785,12 @@ namespace cs296
 		hipfd.restitution = 0.8f;
 		hipfd.filter.groupIndex = -1;
 		  
+/*!
+    * name -jd1 <br>
+  * datatype - b2WeldJointDef <br>
+  * operation -Defining a joint which joins two bodies rigidly <br>
+  * value - Joints the cheetahBody and hip part of the cheetah<br>
+  */ 
 		b2BodyDef hipbd;
 		hipbd.type = b2_dynamicBody;
 		hipbd.position.Set(hipref.x + 6.0f, hipref.y + 37.0f);
@@ -505,6 +811,39 @@ namespace cs296
 		 //TAIL
 	{
 		//Tail object1
+/*!
+ * name -tail1 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object1<br>
+ */
+  
+/*! 
+  *
+  * name -hrec <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define the horizontal part of the 1st piece of the tail. <br>
+  * value - This contains shape for horizontal box which is in a shape of rectangle<br>
+  */
+/*! 
+  *
+  * name -vrec <br>
+  * datatype -b2PolygonShape <br>
+  * operation -To define the vertical part of the 1st piece of the tail. <br>
+  * value - This contains shape for vertical box which is in a shape of rectangle<br>
+  */
+/*!	
+ * name -bd2 <br>
+ * datatype -b2BodyDef <br>
+ * operation -Holds all the data needed to construct a rigid body. <br>
+ * value -Contains all data for tail object1 <br>
+ */
+ /*!
+   * name -fd2 <br>
+  * datatype -b2FixtureDef <br>
+  * operation -Used to attach a shape to a body for collision detection <br>
+  * value - Defines a fixture for tail object1<br>
+  */
 		b2Body* tail1;
 		b2PolygonShape hrec,vrec;
 		hrec.SetAsBox(1.0f, 2.0f);
@@ -533,7 +872,12 @@ namespace cs296
 		jd.Initialize(tail1, cheetahBody, anchor);
 		m_world->CreateJoint(&jd);
 
-
+/*!
+ * name -tail2 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object2<br>
+ */
 		//Tail object2
 		b2Body* tail2;
 		tail2 = m_world->CreateBody(&bd2);
@@ -551,6 +895,13 @@ namespace cs296
 		jd.Initialize(tail1,tail2, anchor);
 		m_world->CreateJoint(&jd);
 
+  /*! \brief 
+  * name -joint4 <br>
+  * datatype -b2DistanceJointDef <br>
+  * operation -Defining an spring joint between two bodies to staility <br>
+  * value - this joins tail1 and tail2<br>
+  * 
+  */
 		// making a distance joint
 		b2DistanceJointDef joint4;
 		const b2Vec2 pt1(ref.x + 19.0f, ref.y + 37.6f);
@@ -560,6 +911,13 @@ namespace cs296
 		joint4.frequencyHz = 1.0f;
 		joint4.dampingRatio =0.8f;
 		m_world->CreateJoint(&joint4);
+		
+/*!
+ * name -tail3 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object3<br>
+ */
 
 		//Tailobject3
 		b2Body* tail3;
@@ -577,6 +935,13 @@ namespace cs296
 		anchor.Set(ref.x + 23.1f, ref.y + 33.0f);
 		jd.Initialize(tail2,tail3, anchor);
 		m_world->CreateJoint(&jd);
+		
+/*!
+ * name -tail4 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object4<br>
+ */
 
 		//Tailobject4
 		b2Body* tail4;
@@ -594,6 +959,13 @@ namespace cs296
 		anchor.Set(ref.x + 25.5f, ref.y + 30.0f);
 		jd.Initialize(tail3,tail4, anchor);
 		m_world->CreateJoint(&jd);
+		
+/*!
+ * name -tail5 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object5<br>
+ */
 
 		//Tailobject5
 		b2Body* tail5;
@@ -612,6 +984,12 @@ namespace cs296
 		jd.Initialize(tail4,tail5, anchor);
 		m_world->CreateJoint(&jd);
 
+/*!
+ * name -tail6 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object6<br>
+ */
 		//Tailobject6
 		b2Body* tail6;
 		tail6 = m_world->CreateBody(&bd2);
@@ -629,6 +1007,12 @@ namespace cs296
 		jd.Initialize(tail5,tail6, anchor);
 		m_world->CreateJoint(&jd);
 
+/*!
+ * name -tail7 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object7<br>
+ */
 		//Tailobject7
 		b2Body* tail7;
 		tail7 = m_world->CreateBody(&bd2);
@@ -646,6 +1030,12 @@ namespace cs296
 		jd.Initialize(tail6,tail7, anchor);
 		m_world->CreateJoint(&jd);
 
+/*!
+ * name -tail8 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object8<br>
+ */
 		//Tailobject8
 		b2Body* tail8;
 		tail8 = m_world->CreateBody(&bd2);
@@ -662,6 +1052,13 @@ namespace cs296
 		anchor.Set(ref.x + 26.3f, ref.y + 19.0f);
 		jd.Initialize(tail7,tail8, anchor);
 		m_world->CreateJoint(&jd);
+		
+/*!
+ * name -tail9 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object9<br>
+ */
 
 		//Tailobject9
 		b2Body* tail9;
@@ -680,6 +1077,12 @@ namespace cs296
 		jd.Initialize(tail8,tail9, anchor);
 		m_world->CreateJoint(&jd);
 
+/*!
+ * name -tail10 <br>
+ * datatype -b2Body* <br>
+ * operation -Pointer to b2Body object. <br>
+ * value - This contains pointer to the tail object10<br>
+ */
 		//Tailobject10
 		b2Body* tail10;
 		tail10 = m_world->CreateBody(&bd2);
